@@ -11,7 +11,6 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 public class RSDTO {
     private Integer no;
     private Integer sur_seq;
@@ -26,8 +25,14 @@ public class RSDTO {
     private String use_yn;
     private String udt_name;
     private String udt_date;
-    private List<RSI> suri=new ArrayList<>();
+    private List<RSI> suri;
 //    private List<String> deletedQueryId;
+
+    public RSDTO(){
+        List<RSI> _suri=new ArrayList<>();
+        _suri.add(new RSI());
+        this.suri = _suri;
+    }
 
 
 

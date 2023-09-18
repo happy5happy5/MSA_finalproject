@@ -17,8 +17,8 @@
             <label for="research-title-input" class="form-label">Title</label>
             <input type="text" class="form-control" id="research-title-input" name="title"
                    th:value="${rsDTO.sur_title}"
-                   onkeyup="validateTitle(this)">
-            <small id="title-help" class="form-text text-muted">0 / 100 characters</small>
+                   onkeyup="validateInput(this,100)">
+            <small id="research-title-input-help" class="form-text text-muted"></small>
         </div>
         <div class="mb-3">
             <label for="research-writer-input" class="form-label">Writer</label>
@@ -47,10 +47,9 @@
         <div class="mb-3">
             <label for="research-content-input" class="form-label">Content</label>
             <textarea class="form-control" id="research-content-input" name="content" rows="6"
-                      onkeyup="validateContent(this)">
-                [[${rsDTO.sur_desc}]]
+                      onkeyup="validateInput(this,1000)">[[${rsDTO.sur_desc}]]
             </textarea>
-            <small id="content-help" class="form-text text-muted">0 / 1000 characters</small>
+            <small id="research-content-input-help" class="form-text text-muted">0 / 1000 characters</small>
         </div>
 
         <!--        <div class="mb-3">-->
@@ -167,22 +166,27 @@
 </script>
 <script th:inline="javascript">
     /*<![CDATA[*/
-    let rs = [[${rs}]];
+    let rsDTO = [[${rsDTO}]];
     let deletedQueryId=[];
     /*]]>*/
-    console.log(rs)
-    console.log(111)
+    console.log(rsDTO)
 </script>
 <script>
     // 페이지 로드 시 초기 데이터를 rsDTO에서 가져와서 suri 폼을 생성합니다.
 
     window.addEventListener('load', function () {
+        // localStorage에 저장된 rsDTO가 있을 경우 가져옵니다.
+        if (localStorage.getItem('rsDTO')) {
+            rsDTO = JSON.parse(localStorage.getItem('rsDTO'));
+        }
         loadRS();
+            // research-title-input의 value를 가져옵니다.
+
     });
 
     // rsDTO를 이용하여 초기 suri 폼을 생성하는 함수
     function loadRS() {
-        let suriList = rs.suri;
+        let suriList = rsDTO.suri;
         suriList.sort((a, b) => {
             return a.suri_no - b.suri_no;
         })
@@ -193,7 +197,25 @@
                 addSuriForm(i);
             }
         }
-        // let lastSuriNo = suriList[suriList.length - 1].suri_no;
+    //     rsDTO의 title content date 값을 이용하여 초기 값 설정
+        document.getElementById('research-title-input').value = rsDTO.sur_title;
+        document.getElementById('research-content-input').value = rsDTO.sur_desc;
+        document.getElementById('research-startdate-input').value = rsDTO.sur_sat_date;
+        document.getElementById('research-enddate-input').value = rsDTO.sur_end_date;
+        // document.getElementById('num-of-questions-input').value = rsDTO.que_cnt;
+        const researchTitleInput = document.getElementById('research-title-input');
+        const titleHelp = document.getElementById('research-title-input-help');
+
+        // value의 length를 계산하고 내용을 업데이트합니다.
+        const inputLength = researchTitleInput.value.length;
+        titleHelp.textContent = `${inputLength} / 100 characters`;
+
+        const researchContentInput = document.getElementById('research-content-input');
+        const contentHelp = document.getElementById('research-content-input-help');
+
+        const contentLength = researchContentInput.value.length;
+        contentHelp.textContent = `${contentLength} / 1000 characters`;
+
     }
 
     function updateResearchDTO() {
@@ -202,7 +224,7 @@
         suriForms.forEach((form, index) => {
             const questionNumber = index + 1;
             const suriData = {
-                sur_seq: rs.sur_seq,
+                sur_seq: rsDTO.sur_seq,
                 suri_seq: form.querySelector(`input[name^="suri_seq_"]`).value,
                 suri_no: form.querySelector(`input[name^="suri_no_"]`).value,
                 suri_title: form.querySelector(`input[name^="suri_title_"]`).value,
@@ -211,42 +233,44 @@
                 suri_que3: form.querySelector(`input[name^="suri_que3_"]`).value,
                 suri_que4: form.querySelector(`input[name^="suri_que4_"]`).value,
                 suri_que5: form.querySelector(`input[name^="suri_que5_"]`).value,
-                suri_type: form.querySelector(`input[name^="suri_type_"]:checked`) ? '3' : '1',
-                suri_reason: form.querySelector(`input[name^="suri_reason_"]`).value,
+                // suri_type: form.querySelector(`input[name^="suri_type_"]:checked`) ? '3' : '1',
+                // suri_reason: form.querySelector(`input[name^="suri_reason_"]`).value,
             };
 
             updatedSuriData.push(suriData);
         });
 
         // rs 업데이트
-        rs.suri = updatedSuriData;
+        rsDTO.suri = updatedSuriData;
 
         // research-title-input
-        rs.sur_title = document.getElementById('research-title-input').value;
+        rsDTO.sur_title = document.getElementById('research-title-input').value;
         // research-content-input
-        rs.sur_desc = document.getElementById('research-content-input').value;
+        rsDTO.sur_desc = document.getElementById('research-content-input').value;
         // research-startdate-input
-        rs.sur_sat_date = document.getElementById('research-startdate-input').value;
+        rsDTO.sur_sat_date = document.getElementById('research-startdate-input').value;
         // research-enddate-input
-        rs.sur_end_date = document.getElementById('research-enddate-input').value;
+        rsDTO.sur_end_date = document.getElementById('research-enddate-input').value;
         // num-of-questions-input
         // rs.que_cnt = document.getElementById('num-of-questions-input').value;
         // deletedQueryId
         // rs.deletedQueryId=deletedQueryId
 
         // TODO: 중간 저장 데이터 서버 작업
-        axios.post('/research/create/save', rs)
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
+        // axios.post('/research/create/save', rsDTO)
+        //     .then(function (response) {
+        //         console.log(response);
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //     });
+        // localStorage에 rsDTO 저장
+        localStorage.setItem('rsDTO', JSON.stringify(rsDTO));
 
 
         // 확인 메시지 또는 다른 작업을 추가할 수 있습니다.
         alert('중간 저장되었습니다.');
-        console.log(rs);
+        console.log(rsDTO);
     }
 
     function addSuriForm(questionNumber) {
@@ -254,118 +278,113 @@
         const suriForm = document.createElement('div');
         suriForm.classList.add('mb-3');
         suriForm.classList.add('suri-form');
-        suriForm.classList.add('border')
-        suriForm.classList.add('border-primary')
-        suriForm.classList.add('p-5')
+        suriForm.classList.add('border');
+        suriForm.classList.add('border-primary');
+        suriForm.classList.add('p-5');
         suriForm.id = `suri_no_${questionNumber}`;
 
         // sur_seq input 생성 및 설정
-        const surSeqInput = document.createElement('input');
-        surSeqInput.type = 'hidden';
-        surSeqInput.name = `suri_seq_${questionNumber}`;
-        let suriData = rs.suri.find(suri => suri.suri_no === questionNumber.toString());
+        const surSeqInput = createHiddenInput(`suri_seq_${questionNumber}`);
+        let suriData = rsDTO.suri.find(suri => suri.suri_no === questionNumber.toString());
         surSeqInput.value = suriData ? suriData.suri_seq : '';
         suriForm.appendChild(surSeqInput);
 
         // suri_no input 생성 및 설정
-        const suriNoInput = document.createElement('input');
-        suriNoInput.type = 'hidden';
-        suriNoInput.name = `suri_no_${questionNumber}`;
+        const suriNoInput = createHiddenInput(`suri_no_${questionNumber}`);
         suriNoInput.value = questionNumber;
         suriForm.appendChild(suriNoInput);
 
-
         // 질문 제목 input 생성 및 설정
-        const questionTitleLabel = document.createElement('label');
-        questionTitleLabel.textContent = `Question ${questionNumber}:`;
+        const questionTitleLabel = createLabel(`Question ${questionNumber}:`);
         suriForm.appendChild(questionTitleLabel);
 
-        const questionTitleInput = document.createElement('input');
-        questionTitleInput.type = 'text';
-        questionTitleInput.classList.add('form-control');
-        questionTitleInput.name = `suri_title_${questionNumber}`;
+        const questionTitleInput = createTextInput(`suri_title_${questionNumber}`);
         questionTitleInput.value = suriData ? suriData.suri_title : "";
         suriForm.appendChild(questionTitleInput);
-
+        addValidationAndLimit(questionTitleInput, 200);
 
         const optionContainer = document.createElement('div');
-        // todo: 여기 마진 줘서 앞으로 당기기
-        optionContainer.classList.add('ms-5')
-
+        optionContainer.classList.add('ms-5');
 
         // 질문 보기 (1부터 5까지) input 생성 및 설정
         for (let i = 1; i <= 5; i++) {
-            const questionOptionLabel = document.createElement('label');
-            questionOptionLabel.textContent = `Option ${i}:`;
+            const questionOptionLabel = createLabel(`Option ${i}:`);
             optionContainer.appendChild(questionOptionLabel);
 
-            const questionOptionInput = document.createElement('input');
-            questionOptionInput.type = 'text';
-            questionOptionInput.classList.add('form-control');
-            questionOptionInput.name = `suri_que${i}_${questionNumber}`;
+            const questionOptionInput = createTextInput(`suri_que${i}_${questionNumber}`);
             // suriData가 있을 경우 기존 데이터를 입력
             if (suriData) {
                 questionOptionInput.value = suriData[`suri_que${i}`];
             }
-            optionContainer.appendChild(questionOptionInput)
+            optionContainer.appendChild(questionOptionInput);
+            addValidationAndLimit(questionOptionInput, 100);
         }
+
         suriForm.appendChild(optionContainer);
-
-        // suri_type 선택 input 생성 및 설정 (체크박스로 변경)
-        const suriTypeCheckbox = document.createElement('input');
-        suriTypeCheckbox.type = 'checkbox';
-        suriTypeCheckbox.classList.add('form-check-input');
-        suriTypeCheckbox.name = `suri_type_${questionNumber}`;
-        suriTypeCheckbox.value = '3'; // suri_type 3은 주관식
-        suriForm.appendChild(suriTypeCheckbox);
-
-        const suriTypeLabel = document.createElement('label');
-        suriTypeLabel.classList.add('form-check-label');
-        suriTypeLabel.textContent = 'Open Ended (3)';
-        suriTypeLabel.htmlFor = `suri_type_${questionNumber}`;
-        suriForm.appendChild(suriTypeLabel);
-
-        // 선택 사유 input 생성 및 설정 (체크박스 체크 시 보이도록)
-        const suriReasonInput = document.createElement('input');
-        suriReasonInput.type = 'text';
-        suriReasonInput.classList.add('form-control');
-        suriReasonInput.name = `suri_reason_${questionNumber}`;
-        suriReasonInput.placeholder = 'Select Reason';
-        suriReasonInput.style.display = suriTypeCheckbox.checked ? 'block' : 'none'; // suri_type 체크 시 보이도록
-        suriForm.appendChild(suriReasonInput);
-
-        // suri_type 체크박스 이벤트 리스너 추가
-        suriTypeCheckbox.addEventListener('change', function () {
-            suriReasonInput.style.display = this.checked ? 'block' : 'none';
-        });
-
-        // "Delete" 버튼 추가
-        // const deleteButton = document.createElement('button');
-        // deleteButton.type = 'button';
-        // deleteButton.classList.add('btn', 'btn-danger');
-        // deleteButton.textContent = 'Delete';
-        // deleteButton.addEventListener('click', function () {
-        //     // 삭제 버튼 클릭 시 실행할 로직 추가
-        //     deleteSuriForm(questionNumber);
-        // });
-        // suriForm.appendChild(deleteButton);
 
         // research-query-container에 추가
         const container = document.getElementById('research-query-container');
         container.appendChild(suriForm);
-        if(suriForm.querySelector('input[name^="suri_seq_"]')){
-            // console.log(suriForm.querySelector('input[name^="suri_seq_"]').value)
-            let suri_seq = suriForm.querySelector('input[name^="suri_seq_"]').value
-            deletedQueryId=deletedQueryId.filter(_suri_seq=> _suri_seq!==suri_seq)
+
+        // 삭제된 쿼리 ID 목록에서 현재 추가된 쿼리 ID 제거
+        if (suriForm.querySelector('input[name^="suri_seq_"]')) {
+            let suri_seq = suriForm.querySelector('input[name^="suri_seq_"]').value;
+            deletedQueryId = deletedQueryId.filter(_suri_seq => _suri_seq !== suri_seq);
         }
-        // let suriForms = document.querySelector('#research-query-container')
-        // if(suriForms.lastChild){
-        //     console.log(suriForms.lastChild.querySelector('input[name^="suri_seq_"]').value)
-        //     let suri_seq=suriForms.lastChild.querySelector('input[name^="suri_seq_"]').value
-        //     deletedQueryId.push(suri_seq)
-        //     // suri_que5: form.querySelector(`input[name^="suri_que5_"]`).value,
-        //     // deletedQueryId
-        // }
+    }
+
+    function createHiddenInput(name) {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        return input;
+    }
+
+    function createLabel(text) {
+        const label = document.createElement('label');
+        label.textContent = text;
+        return label;
+    }
+
+    function createTextInput(name) {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.classList.add('form-control');
+        input.name = name;
+        return input;
+    }
+
+    function addValidationAndLimit(input, maxLength) {
+        const helpElement = document.createElement('small');
+        helpElement.name = input.name + '-help';
+        helpElement.classList.add('form-text');
+        // helpElement.classList.add('text-muted');
+        // input 요소의 초기값을 이용하여 길이를 설정
+        const initialLength = input.value.length;
+        helpElement.textContent = `${initialLength} / ${maxLength} characters`;
+
+        // 부모 요소가 존재할 때만 appendChild 호출
+        if (input.parentNode) {
+            input.parentNode.appendChild(helpElement);
+        }
+
+        input.addEventListener('input', function () {
+            const inputLength = input.value.length;
+            helpElement.textContent = `${inputLength} / ${maxLength} characters`;
+            if (inputLength > maxLength) {
+                helpElement.classList.add('text-danger');
+                input.classList.add('is-invalid');
+                setTimeout(function () {
+                    input.value = input.value.substring(0, maxLength);
+                    helpElement.textContent = `${maxLength} / ${maxLength} characters`;
+                    helpElement.classList.remove('text-danger');
+                    input.classList.remove('is-invalid');
+                }, 1000);
+            } else {
+                helpElement.classList.remove('text-danger');
+                input.classList.remove('is-invalid');
+            }
+        });
     }
 
     function deleteSuriForm() {
@@ -379,6 +398,26 @@
         }
         if (suriForms.lastChild) suriForms.lastChild.remove()
 
+    }
+
+
+    function validateInput(input, maxLength) {
+        const helpElement = document.getElementById(input.id + '-help');
+        const inputLength = input.value.length;
+        helpElement.textContent = `${inputLength} / ${maxLength} characters`;
+        if (inputLength > maxLength) {
+            helpElement.classList.add('text-danger');
+            input.classList.add('is-invalid');
+            // 1초 뒤에 maxLength 길이로 자르기
+            helpElement.textContent = `${inputLength} / ${maxLength} characters` + `  최대 ${maxLength}자까지 입력 가능합니다.`;
+            setTimeout(() => {
+                input.value = input.value.substring(0, maxLength);
+                helpElement.textContent = `${maxLength} / ${maxLength} characters`;
+            }, 1000);
+        } else {
+            helpElement.classList.remove('text-danger');
+            input.classList.remove('is-invalid');
+        }
     }
 
 
