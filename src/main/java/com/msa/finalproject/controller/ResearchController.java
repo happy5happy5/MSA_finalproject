@@ -1,6 +1,7 @@
 package com.msa.finalproject.controller;
 
 import com.msa.finalproject.model.RS;
+import com.msa.finalproject.model.RSDTO;
 import com.msa.finalproject.model.RSsDTO;
 import com.msa.finalproject.model.RequestRSDTO;
 import com.msa.finalproject.service.ResearchService;
@@ -38,8 +39,8 @@ public class ResearchController {
     @GetMapping("/create")
     public String create(Model model) {
         System.out.println("[ResearchController] GET /research/create create()");
-        RS rs = new RS();
-        model.addAttribute("rs", rs);
+        RSDTO rsDTO = new RSDTO();
+        model.addAttribute("rsDTO", rsDTO);
         return "research/createform";
     }
 

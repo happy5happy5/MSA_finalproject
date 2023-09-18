@@ -2,6 +2,7 @@ package com.msa.finalproject.service;
 
 import com.msa.finalproject.mapper.ResearchMapper;
 import com.msa.finalproject.model.RS;
+import com.msa.finalproject.model.RSDTO;
 import com.msa.finalproject.model.RSsDTO;
 import com.msa.finalproject.model.RequestRSDTO;
 import com.msa.finalproject.util.Statics;
@@ -29,14 +30,14 @@ public class ResearchServiceImpl implements ResearchService {
         String keyword = requestRSDTO.getKeyword();
         Integer totalSeq = researchMapper.getTotalSeq(column, keyword);
 
-        if (requestRSDTO.getPage() == null || requestRSDTO.getPageToGo().equals("1")) {
+        if (requestRSDTO.getPage() == null || (!(requestRSDTO.getPageToGo() == null) &&requestRSDTO.getPageToGo().equals("1"))) {
             List<RS> rss = researchMapper.getListWithOnlyPageSize(PAGE_SIZE, column, keyword);
             if (rss.isEmpty()) {
                 return null;
             }
             RSsDTO rssDTO = new RSsDTO(
                     rss.stream()
-                            .map(RS::new)
+                            .map(RSDTO::new)
                             .toList(), totalSeq, 1);
             rssDTO.setKeyword(keyword);
             rssDTO.setColumn(column);
@@ -63,7 +64,7 @@ public class ResearchServiceImpl implements ResearchService {
 
         RSsDTO rssDTO = new RSsDTO(
                 rss.stream()
-                        .map(RS::new)
+                        .map(RSDTO::new)
                         .toList(), totalSeq, pageToGo);
         rssDTO.setKeyword(keyword);
         rssDTO.setColumn(column);

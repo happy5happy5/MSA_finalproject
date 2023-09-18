@@ -48,10 +48,10 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="rss : ${rssDTO.getRS()}">
+            <tr th:each="rss : ${rssDTO.getRSDTO()}">
                 <td th:text="${rss.getSur_seq()}"></td>
                 <td class="text-lg-start">
-                    <a th:href="@{${'/rss/detail'}(sur_seq=${rss.getSur_seq()})}" th:text="${rss.getSur_title()}"
+                    <a th:href="@{${'/research/detail'}(sur_seq=${rss.getSur_seq()})}" th:text="${rss.getSur_title()}"
                        onclick="saveBack()"></a>
                 </td>
                 <td th:text="${rss.getReg_name()}"></td>
@@ -67,7 +67,6 @@
         }
     </script>
 </section>
-
     <nav aria-label="Page navigation">
         <div class="d-flex justify-content-center mb-3">
             <ul class="pagination w-75">
@@ -118,8 +117,9 @@
         axios.get(loc + '/create')
             .then(function (response) {
                 // console.log(response);
-                document.body.innerHTML = response.data;
-                history.pushState(null, '', loc + '/create');
+                window.location.href = loc + '/create';
+                // document.body.innerHTML = response.data;
+                // history.pushState(null, '', loc + '/create');
                 // onPageLoad();
             })
             .catch(function (error) {

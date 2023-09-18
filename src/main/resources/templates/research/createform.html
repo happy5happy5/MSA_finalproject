@@ -171,6 +171,7 @@
     let deletedQueryId=[];
     /*]]>*/
     console.log(rs)
+    console.log(111)
 </script>
 <script>
     // 페이지 로드 시 초기 데이터를 rsDTO에서 가져와서 suri 폼을 생성합니다.
@@ -231,7 +232,7 @@
         // num-of-questions-input
         // rs.que_cnt = document.getElementById('num-of-questions-input').value;
         // deletedQueryId
-        rs.deletedQueryId=deletedQueryId
+        // rs.deletedQueryId=deletedQueryId
 
         // TODO: 중간 저장 데이터 서버 작업
         axios.post('/research/create/save', rs)

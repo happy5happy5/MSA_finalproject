@@ -14,6 +14,7 @@ public class RSI {
     private int suri_seq;
     private int sur_seq;
     private String suri_no;
+    private String suri_pno;
     private String suri_title;
     private String suri_que1;
     private String suri_que2;

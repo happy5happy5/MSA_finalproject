@@ -112,6 +112,7 @@ CREATE TABLE IF NOT EXISTS rsi
     suri_seq   bigint AUTO_INCREMENT PRIMARY KEY COMMENT '문항번호 (PK)',
     sur_seq    bigint     NOT NULL COMMENT '설문번호 (FK)',
     suri_no    VARCHAR(8) NOT NULL COMMENT '문항번호 (1~)',
+    suri_pno   VARCHAR(8) COMMENT '상위문항번호 (1~)',
     suri_title VARCHAR(200) COMMENT '문항제목',
     suri_que1  VARCHAR(200) COMMENT '문항 보기1',
     suri_que2  VARCHAR(200) COMMENT '문항 보기2',
