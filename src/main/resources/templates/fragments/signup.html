@@ -1,0 +1,72 @@
+<div th:fragment="signup">
+    <form>
+        <div class="mb-3">
+            <label for="userId" class="form-label">아이디</label>
+            <input type="text" class="form-control" id="userId" name="userid"
+                   placeholder="아이디를 입력하세요" onblur="checkUserId(this)">
+            <small class="form-text"></small>
+        </div>
+        <div class="mb-3">
+            <label for="password" class="form-label">비밀번호</label>
+            <div class="input-group">
+                <input type="password" class="form-control" id="password"
+                       name="password" placeholder="비밀번호를 입력하세요"
+                       oninput="checkPassword(this)">
+                <button type="button" class="btn btn-outline-secondary"
+                        onclick="togglePasswordVisibility(this)">보기
+                </button>
+            </div>
+            <small class="form-text"></small>
+        </div>
+        <div class="mb-3">
+            <label for="name" class="form-label">이름</label>
+            <input type="text" class="form-control" id="name" name="name"
+                   placeholder="이름을 입력하세요" oninput="checkName(this)">
+            <small class="form-text"></small>
+        </div>
+
+        <div class="mb-3">
+            <label for="phone" class="form-label">휴대전화</label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="phone" name="phone"
+                       placeholder="휴대전화를 입력하세요" oninput="checkPhone(this)">
+                <button type="button" class="btn btn-outline-secondary">
+                    인증요청
+                </button>
+            </div>
+            <small class="form-text"></small>
+        </div>
+
+
+        <div class="mb-3">
+
+            <label for="email" class="form-label">이메일</label>
+            <div class="input-group">
+
+                <input type="email" class="form-control" id="email" name="email"
+                       placeholder="이메일을 입력하세요" oninput="checkEmail(this)">
+                <button type="button" class="btn btn-outline-secondary"
+                        onclick="requestVerification()">인증요청
+                </button>
+            </div>
+            <small class="form-text"></small>
+        </div>
+
+        <div class="mb-3" id="verificationCode" style="display: none;">
+            <label for="verificationInput"></label>
+            <div class="input-group">
+                <input type="text" class="form-control" id="verificationInput"
+                       placeholder="인증번호를 입력하세요">
+                <button type="button" class="btn btn-outline-secondary"
+                        onclick="submitVerification()">확인
+                </button>
+            </div>
+            <small class="form-text" id="timerText" style="display: none;"></small>
+        </div>
+
+        <!-- 다른 필드들을 추가할 수 있음 -->
+        <button type="button" class="btn btn-primary" onclick="signupAction()">회원가입</button>
+    </form>
+
+
+</div>

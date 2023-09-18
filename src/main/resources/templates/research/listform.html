@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>OneDay Research</title>
+</head>
+<body>
+<div th:insert="~{fragments/navbar :: nav_bar('research')}"></div>
+
+<section th:fragment="rss(rssDTO)">
+    <div class="container p-0 text-center">
+        <form action="/excel/download" method="get" id="excelDownloadForm" style="display: none;">
+            <input type="hidden" name="column" th:value="${rssDTO.column}"> <!-- 검색할 칼럼 -->
+            <input type="hidden" name="keyword" th:value="${rssDTO.keyword}"> <!-- 검색어 -->
+            <button type="submit" id="excelDownloadButton"></button>
+        </form>
+        <button type="button" onclick="document.getElementById('excelDownloadButton').click()">Download Excel</button>
+
+
+        <form th:action="@{/research/list}" method="get">
+            <div class="form-group">
+                <label for="searchColumn">검색할 칼럼 선택:</label>
+                <select id="searchColumn" name="column">
+                    <option value="sur_title" th:selected="${rssDTO.getColumn() == 'sur_title'}">제목</option>
+                    <option value="reg_name" th:selected="${rssDTO.getColumn() == 'reg_name'}">작성자</option>
+                    <option value="sur_content" th:selected="${rssDTO.getColumn() == 'sur_content'}">내용</option>
+                </select>
+            </div>
+            <label>
+                <input type="text" name="keyword" placeholder="검색어 입력" th:value="${rssDTO.getKeyword()}">
+            </label>
+            <input type="hidden" name="pageToGo" th:value="${rssDTO.getPrevPageBlock()}">
+            <input type="hidden" name="page" th:value="${rssDTO.getPage()}">
+            <input type="hidden" name="startSeq" th:value="${rssDTO.getStartSeq()}">
+            <input type="hidden" name="endSeq" th:value="${rssDTO.getEndSeq()}">
+            <!--            th:href="@{${url_list}(pageToGo=${rssDTO.getPrevPageBlock()},page=${rssDTO.getPage()},startBoard=${rssDTO.getStartRss()},endBoard=${rssDTO.getEndRss()})-->
+            <button type="submit">검색</button>
+        </form>
+
+        <table class="table table-hover" style="height: 80vh">
+            <thead>
+            <tr>
+                <th class="col-1">No.</th>
+                <th class="col-6 text-lg-start">Title</th>
+                <th class="col-2">Writer</th>
+                <th class="col-2">Date</th>
+                <th class="col-1">View</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="rss : ${rssDTO.getRS()}">
+                <td th:text="${rss.getSur_seq()}"></td>
+                <td class="text-lg-start">
+                    <a th:href="@{${'/rss/detail'}(sur_seq=${rss.getSur_seq()})}" th:text="${rss.getSur_title()}"
+                       onclick="saveBack()"></a>
+                </td>
+                <td th:text="${rss.getReg_name()}"></td>
+                <td th:text="${rss.getReg_date()}"></td>
+                <td th:text="${rss.getHits()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <script>
+        function saveBack() {
+            sessionStorage.setItem("back", window.location.href);
+        }
+    </script>
+</section>
+
+    <nav aria-label="Page navigation">
+        <div class="d-flex justify-content-center mb-3">
+            <ul class="pagination w-75">
+                <li class="page-item">
+                    <a class="page-link" th:href="@{'/research/list'}" aria-label="First">
+                        First
+                    </a>
+                </li>
+                <li>
+                    <a class="page-link"
+                          th:href="@{${'/research/list'}(pageToGo=${rssDTO.getPrevPageBlock()},page=${rssDTO.getPage()},startSeq=${rssDTO.getStartSeq()},endSeq=${rssDTO.getEndSeq()}, column= ${rssDTO.getColumn()},keyword =${rssDTO.getKeyword()})}">
+                        Previous
+                    </a>
+                </li>
+                <li class="d-flex justify-content-center w-75">
+                    <div th:each="page : ${#numbers.sequence(rssDTO.getPageBlockStart(), rssDTO.getPageBlockEnd())}">
+                        <div th:class="${rssDTO.getPage() == page} ? 'page-item active d-inline' : 'page-item d-inline'">
+                            <a class="page-link text-center" style="width: 3rem"
+                               th:href="@{${'/research/list'}(pageToGo=${page},page=${rssDTO.getPage()},startSeq=${rssDTO.getStartSeq()},endSeq=${rssDTO.getEndSeq()}, column= ${rssDTO.getColumn()},keyword =${rssDTO.getKeyword()})}"
+                               th:text="${page}"></a>
+                        </div>
+                    </div>
+                </li>
+
+                <li>
+                    <a class="page-link"
+                       th:href="@{${'/research/list'}(pageToGo=${rssDTO.getNextPageBlock()},page=${rssDTO.getPage()},startSeq=${rssDTO.getStartSeq()},endSeq=${rssDTO.getEndSeq()}, column= ${rssDTO.getColumn()},keyword =${rssDTO.getKeyword()})}">
+                        Next
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link"
+                       th:href="@{${'/research/list'}(pageToGo=${rssDTO.getTotalPage()},page=${rssDTO.getPage()},startSeq=${rssDTO.getStartSeq()},endSeq=${rssDTO.getEndSeq()})}"
+                       aria-label="Last">
+                        Last
+                    </a>
+                </li>
+            </ul>
+
+            <div class="d-flex justify-content-end mb-3 ps-5">
+                <a class="btn btn-primary" onclick="create_btn()">Create</a>
+            </div>
+        </div>
+    </nav>
+<script>
+    function create_btn() {
+        let loc = "/research"
+        axios.get(loc + '/create')
+            .then(function (response) {
+                // console.log(response);
+                document.body.innerHTML = response.data;
+                history.pushState(null, '', loc + '/create');
+                // onPageLoad();
+            })
+            .catch(function (error) {
+                alert(error)
+                console.log(error);
+            });
+    }
+</script>
+
+
+
+</body>
+</html>

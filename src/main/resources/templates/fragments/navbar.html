@@ -1,0 +1,111 @@
+<div th:fragment="nav_bar(activeItem)">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+        function updateAxiosHeaders() {
+            const token = sessionStorage.getItem("token");
+            // console.log("token:", token)
+            axios.defaults.headers.common['Authorization'] = token ? token : null;
+            console.log(axios.defaults.headers.common['Authorization'])
+        }
+
+        // 페이지 로딩 시 초기 설정
+        updateAxiosHeaders();
+    </script>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css">
+    <nav class="navbar nav nav-tabs navbar-expand-lg navbar-light border-0">
+        <div class="container">
+            <h1>
+                <a class="text-decoration-none text-info" href="/">OneTwoDay</a>
+            </h1>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+                    aria-controls="#navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse " id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item ">
+                        <a class="nav-link border-0" th:classappend="${activeItem == 'home' ? 'text-primary' : ''}"
+                           href="/">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link border-0" th:classappend="${activeItem == 'about' ? 'text-primary' : ''}"
+                           href="/">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link border-0" th:classappend="${activeItem == 'board' ? 'text-primary' : ''}"
+                           href="/board/list">Board</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link border-0" th:classappend="${activeItem == 'query' ? 'text-primary' : ''}"
+                           href="/query/list">Query</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link border-0" th:classappend="${activeItem == 'research' ? 'text-primary' : ''}"
+                           href="/research/list">Research</a>
+                    </li>
+                </ul>
+
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link border-0" id="loginLink" href="#" data-bs-toggle="modal"
+                           data-bs-target="#loginSignupModal"
+                           onclick="document.getElementById('login-tab').click()">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link border-0" id="signupLink" href="#" data-bs-toggle="modal"
+                           data-bs-target="#loginSignupModal"
+                           onclick="document.getElementById('signup-tab').click()">Signup</a>
+                    </li>
+                </ul>
+
+                <div class="modal fade" id="loginSignupModal" tabindex="-1" aria-labelledby="loginSignupModalLabel"
+                     aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <ul class="nav nav-tabs" id="loginSignupTabs" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link active" id="login-tab" data-bs-toggle="tab" href="#login"
+                                           role="tab" aria-controls="login" aria-selected="true">Login</a>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <a class="nav-link" id="signup-tab" data-bs-toggle="tab" href="#signup"
+                                           role="tab" aria-controls="signup" aria-selected="false">Signup</a>
+                                    </li>
+                                </ul>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="tab-content" id="loginSignupTabContent">
+                                    <div class="tab-pane fade show active" id="login" role="tabpanel"
+                                         aria-labelledby="login-tab">
+                                        <!-- 로그인 내용 -->
+                                        <div th:insert="~{fragments/login::login}"></div>
+                                    </div>
+                                    <div class="tab-pane fade" id="signup" role="tabpanel" aria-labelledby="signup-tab">
+                                        <!-- 회원가입 내용 -->
+                                        <div th:insert="~{fragments/signup::signup}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </nav>
+<!--    <script>-->
+<!--        // JavaScript를 사용하여 스크롤 이벤트를 감지하고 navbar 배경 색상 변경-->
+<!--        window.addEventListener('scroll', function () {-->
+<!--            let navbar = document.querySelector('.navbar');-->
+<!--            if (window.scrollY > 50) {-->
+<!--                navbar.classList.add('navbar-scrolled');-->
+<!--            } else {-->
+<!--                navbar.classList.remove('navbar-scrolled');-->
+<!--            }-->
+<!--        });-->
+<!--    </script>-->
+    <script src="/webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</div>
