@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class RSDTO {
     private Integer no;
     private Integer sur_seq;
@@ -26,13 +27,13 @@ public class RSDTO {
     private String udt_name;
     private String udt_date;
     private List<RSI> suri;
-//    private List<String> deletedQueryId;
+    private List<String> deletedQueryId;
 
-    public RSDTO(){
-        List<RSI> _suri=new ArrayList<>();
-        _suri.add(new RSI());
-        this.suri = _suri;
-    }
+//    public RSDTO(){
+//        List<RSI> _suri=new ArrayList<>();
+//        _suri.add(new RSI());
+//        this.suri = _suri;
+//    }
 
 
 
@@ -54,6 +55,20 @@ public class RSDTO {
 //        }
         this.udt_name = rs.getUdt_name();
         this.udt_date = rs.getUdt_date();
+    }
+
+    public RSDTO(RS rs, List<RSI> suri) {
+        this.no = rs.getNo();
+        this.sur_seq = rs.getSur_seq();
+        this.sur_title = rs.getSur_title();
+        this.sur_desc = rs.getSur_desc();
+        this.que_cnt = rs.getQue_cnt();
+        this.hits = rs.getHits();
+        this.sur_sat_date = rs.getSur_sat_date();
+        this.sur_end_date = rs.getSur_end_date();
+        this.reg_name = rs.getReg_name();
+        this.reg_date = rs.getReg_date();
+        this.suri = suri;
     }
 
     public RS toEntity(){

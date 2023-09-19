@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>Read-Only Research</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css">
+</head>
+<body>
+<div th:insert="~{fragments/navbar :: nav_bar('Read')}"></div>
+<div class="container">
+
+    <h3 class="my-4">Read-Only Research</h3>
+
+    <div id="read-only-form">
+        <div class="mb-3">
+            <label for="research-title-input" class="form-label">Title</label>
+            <input type="text" class="form-control" id="research-title-input" name="title"
+                   th:value="${rsDTO.sur_title}" disabled>
+        </div>
+        <div class="mb-3">
+            <label for="research-writer-input" class="form-label">Writer</label>
+            <input type="text" class="form-control" id="research-writer-input" name="writer"
+                   th:value="${rsDTO.reg_name}" disabled>
+        </div>
+        <!--        기간 (달력 팝업)-->
+
+        <div class="mb-3 row">
+            <label for="research-startdate-input" class="col-2 col-form-label">Start Date</label>
+            <div class="col-4">
+                <input type="datetime-local" class="form-control" id="research-startdate-input" name="startdate"
+                       th:value="${rsDTO.sur_sat_date}" disabled>
+            </div>
+
+            <label for="research-enddate-input" class="col-2 col-form-label">End Date</label>
+            <div class="col-4">
+                <input type="datetime-local" class="form-control" id="research-enddate-input" name="enddate"
+                       th:value="${rsDTO.sur_end_date}" disabled>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="research-content-input" class="form-label">Content</label>
+            <textarea class="form-control" id="research-content-input" name="content" rows="6"
+                      disabled th:text="${rsDTO.sur_desc}"></textarea>
+        </div>
+        <!-- 설문 조사 시작 버튼 -->
+        <button class="btn btn-primary" id="startSurveyBtn">Start Survey</button>
+
+        <!-- 설문 조사 수정 버튼 -->
+        <button class="btn btn-secondary" id="editSurveyBtn">Edit Survey</button>
+
+        <div class="mb-3">
+            <label class="form-label">Questions</label>
+            <!-- Display questions in read-only mode -->
+            <div id="research-query-container">
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let rsDTO = [[${rsDTO}]];
+    /*]]>*/
+    console.log(rsDTO);
+</script>
+<script>
+    function createQuestionElement(question) {
+        const questionContainer = document.createElement("div");
+        questionContainer.classList.add("suri-form", "mb-3", "border", "border-primary", "p-5");
+
+        // Create a label and input for the question title
+        const titleLabel = document.createElement("label");
+        titleLabel.classList.add("form-label");
+        titleLabel.textContent = "Question:";
+        questionContainer.appendChild(titleLabel);
+
+        const titleInput = document.createElement("input");
+        titleInput.type = "text";
+        titleInput.classList.add("form-control");
+        titleInput.disabled = true;
+        titleInput.value = question.suri_title;
+        questionContainer.appendChild(titleInput);
+
+        // Loop through and create input elements for the question options
+        for (let i = 1; i <= 5; i++) {
+            if (question[`suri_que${i}`] === '') {
+                break
+            }
+            const optionLabel = document.createElement("label");
+            optionLabel.classList.add("form-label");
+            optionLabel.textContent = `Option ${i}:`;
+            questionContainer.appendChild(optionLabel);
+
+            const optionInput = document.createElement("input");
+            optionInput.type = "text";
+            optionInput.classList.add("form-control");
+            optionInput.classList.add("ms-3");
+            optionInput.disabled = true;
+
+            if (`suri_que${i}` in question) {
+                optionInput.value = question[`suri_que${i}`];
+                questionContainer.appendChild(optionInput);
+            }
+
+        }
+
+        return questionContainer;
+    }
+
+    // Function to populate the container with questions
+    function populateQuestions() {
+        const container = document.getElementById("research-query-container");
+        for (let i = 0; i < rsDTO.suri.length; i++) {
+            const question = rsDTO.suri[i];
+            const questionElement = createQuestionElement(question);
+            container.appendChild(questionElement);
+        }
+    }
+
+    // Call the function to populate questions when the page loads
+    window.addEventListener("load", populateQuestions);
+
+
+    // 설문 조사 시작 버튼 클릭 이벤트 핸들러
+    document.getElementById("startSurveyBtn").addEventListener("click", function () {
+        // 여기에 설문 조사 시작 동작
+        alert("Survey started!!!!!!!!!!!!!!!!!!!!!!!!!");
+        window.location.href = "/research/start" + "?sur_seq=" + rsDTO.sur_seq;
+        // todo: 사용자 인증 필요 하면 아래 쪽 으로 해야함
+        // axios.get("/research/start" + "?sur_seq=" + rsDTO.sur_seq)
+        //     .then(function (response) {
+        //         console.log(response);
+        //         window.location.href = "/research/start" + "?sur_seq=" + rsDTO.sur_seq;
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //     });
+    });
+
+    // 설문 조사 수정 버튼 클릭 이벤트 핸들러
+    document.getElementById("editSurveyBtn").addEventListener("click", function () {
+        // 여기에 설문 조사 수정 동작
+        alert("Survey edited!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        window.location.href = "/research/edit" + "?sur_seq=" + rsDTO.sur_seq;
+        // todo: 나중에 인증이 필요 할때는 아래와 같이 사용 해야함
+        // axios.get("/research/edit" + "?sur_seq=" + rsDTO.sur_seq)
+        //     .then(function (response) {
+        //         console.log(response);
+        //         window.location.href = "/research/edit" + "?sur_seq=" + rsDTO.sur_seq;
+        //     })
+        //     .catch(function (error) {
+        //         console.log(error);
+        //     });
+    });
+</script>
+</body>
+</html>

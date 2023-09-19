@@ -5,10 +5,7 @@ import com.msa.finalproject.service.ResearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -52,6 +49,50 @@ public class ResearchController {
         researchService.createRS(rsDTO);
 
 
+        return "redirect:/research/list";
+    }
+
+    @GetMapping("/detail")
+    public String detail(Model model, @RequestParam int sur_seq) {
+        System.out.println("[ResearchController] GET /research/detail detail()");
+
+        RSDTO rsDTO = researchService.getRS(sur_seq);
+        model.addAttribute("rsDTO", rsDTO);
+        return "research/readform";
+    }
+
+
+    @GetMapping("/edit")
+    public String edit(Model model, @RequestParam int sur_seq) {
+        System.out.println("[ResearchController] GET /research/edit edit()");
+
+        RSDTO rsDTO = researchService.getRS(sur_seq);
+        model.addAttribute("rsDTO", rsDTO);
+        return "research/editform";
+    }
+
+    @PostMapping("/edit")
+    public String edit(@RequestBody RSDTO rsDTO) {
+        System.out.println("[ResearchController] POST /research/edit edit()");
+
+        researchService.editRS(rsDTO);
+        return "redirect:/research/list";
+    }
+
+    @GetMapping("/start")
+    public String start(Model model, @RequestParam int sur_seq) {
+        System.out.println("[ResearchController] GET /research/start start()");
+
+        RSDTO rsDTO = researchService.getRS(sur_seq);
+        model.addAttribute("rsDTO", rsDTO);
+        return "research/startform";
+    }
+
+    @PostMapping("/start")
+    public String start(@RequestBody List<RSA> rsaDTO) {
+        System.out.println("[ResearchController] POST /research/start start()");
+
+        researchService.createRSA(rsaDTO);
         return "redirect:/research/list";
     }
 

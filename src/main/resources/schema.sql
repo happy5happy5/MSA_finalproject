@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS rsa
     suri_seq    bigint      NOT NULL COMMENT '문항번호 (FK)',
     sura_no     INT  NOT NULL COMMENT '답변번호 (1~)',
     sura_item   VARCHAR(5) COMMENT '답변항목 (12345,24,123 등등) + 0:기타',
-    suri_reason VARCHAR(200) COMMENT '선택사유 (12345일 경우)',
+    sura_reason VARCHAR(200) COMMENT '선택사유 (12345일 경우)',
     sura_detail VARCHAR(200) COMMENT '답변내용 (0일 경우)',
     sura_name   VARCHAR(50) NOT NULL COMMENT '답변자',
     sura_date   DATE COMMENT '답변일',

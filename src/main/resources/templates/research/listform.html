@@ -7,7 +7,7 @@
 <body>
 <div th:insert="~{fragments/navbar :: nav_bar('research')}"></div>
 
-<section th:fragment="rss(rssDTO)">
+<section th:fragment="rss">
     <div class="container p-0 text-center">
         <form action="/excel/download" method="get" id="excelDownloadForm" style="display: none;">
             <input type="hidden" name="column" th:value="${rssDTO.column}"> <!-- 검색할 칼럼 -->
@@ -49,7 +49,7 @@
             </thead>
             <tbody>
             <tr th:each="rss : ${rssDTO.getRSDTO()}">
-                <td th:text="${rss.getSur_seq()}"></td>
+                <td th:text="${rss.getNo()}"></td>
                 <td class="text-lg-start">
                     <a th:href="@{${'/research/detail'}(sur_seq=${rss.getSur_seq()})}" th:text="${rss.getSur_title()}"
                        onclick="saveBack()"></a>

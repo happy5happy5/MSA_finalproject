@@ -77,4 +77,42 @@ public class ResearchServiceImpl implements ResearchService {
             researchMapper.createRSI(_suri);
         }
     }
+
+    @Override
+    public RSDTO getRS(int surSeq) {
+        RS rs = researchMapper.getRS(surSeq);
+        List<RSI> suri = researchMapper.getRSI(surSeq);
+        return new RSDTO(rs, suri);
+    }
+
+    @Override
+    public void editRS(RSDTO rsDTO) {
+        researchMapper.editRS(rsDTO);
+        List<RSI> suri = rsDTO.getSuri();
+        for (RSI _suri : suri) {
+            if (_suri.getSuri_seq() == 0) {
+                _suri.setSur_seq(rsDTO.getSur_seq());
+                researchMapper.createRSI(_suri);
+            } else {
+                researchMapper.editRSI(_suri);
+            }
+        }
+        List<String> deletedQueryId = rsDTO.getDeletedQueryId();
+        if (deletedQueryId != null) {
+            for (String id : deletedQueryId) {
+                researchMapper.deleteRSI(Integer.parseInt(id));
+            }
+        }
+    }
+
+    @Override
+    public void createRSA(List<RSA> rsaDTO) {
+        for (RSA _rsa : rsaDTO) {
+            researchMapper.createRSA(_rsa);
+//            rsr 의 값을 갱신 해야 한다.
+//            그냥 여기서 하지 말고 보여 줄때 마다 계산 하는 건 어떰?
+//            모두다 종료 되고 나면 한번에 계산 하고 해당하는 모든 rsi 삭제 한다
+        }
+
+    }
 }
