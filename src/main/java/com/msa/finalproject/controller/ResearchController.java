@@ -1,15 +1,16 @@
 package com.msa.finalproject.controller;
 
-import com.msa.finalproject.model.RS;
-import com.msa.finalproject.model.RSDTO;
-import com.msa.finalproject.model.RSsDTO;
-import com.msa.finalproject.model.RequestRSDTO;
+import com.msa.finalproject.model.*;
 import com.msa.finalproject.service.ResearchService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/research")
@@ -42,6 +43,16 @@ public class ResearchController {
         RSDTO rsDTO = new RSDTO();
         model.addAttribute("rsDTO", rsDTO);
         return "research/createform";
+    }
+
+    @PostMapping("/create")
+    public String create(@RequestBody RSDTO rsDTO) {
+        System.out.println("[ResearchController] POST /research/create create()");
+
+        researchService.createRS(rsDTO);
+
+
+        return "redirect:/research/list";
     }
 
 }

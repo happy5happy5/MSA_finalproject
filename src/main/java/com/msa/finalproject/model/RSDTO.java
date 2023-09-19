@@ -47,11 +47,11 @@ public class RSDTO {
         this.sur_end_date = rs.getSur_end_date();
         this.reg_name = rs.getReg_name();
         this.reg_date = rs.getReg_date();
-        if(rs.getUse_yn().isEmpty()){
-            this.use_yn = "N";
-        }else{
-            this.use_yn = rs.getUse_yn();
-        }
+//        if(rs.getUse_yn().isEmpty()){
+//            this.use_yn = "N";
+//        }else{
+//            this.use_yn = rs.getUse_yn();
+//        }
         this.udt_name = rs.getUdt_name();
         this.udt_date = rs.getUdt_date();
     }

@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS rsi
 (
     suri_seq   bigint AUTO_INCREMENT PRIMARY KEY COMMENT '문항번호 (PK)',
     sur_seq    bigint     NOT NULL COMMENT '설문번호 (FK)',
-    suri_no    VARCHAR(8) NOT NULL COMMENT '문항번호 (1~)',
+    suri_no    INT NOT NULL COMMENT '문항번호 (1~)',
     suri_pno   VARCHAR(8) COMMENT '상위문항번호 (1~)',
     suri_title VARCHAR(200) COMMENT '문항제목',
     suri_que1  VARCHAR(200) COMMENT '문항 보기1',
@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS rsi
     suri_que5  VARCHAR(200) COMMENT '문항 보기5',
     suri_type  VARCHAR(2) DEFAULT '1' COMMENT '문항유형 (1:단일선택, 2:다중선택, 3:주관식)',
     suri_multi VARCHAR(2) DEFAULT '1' COMMENT '다중선택수 (1:1개, 2:2개, 3:3개, 4:4개, 5:5개)',
-    suri_etc   VARCHAR(1) DEFAULT 'n' COMMENT '기타항목여부',
+    suri_etc   VARCHAR(3) DEFAULT 'n' COMMENT '기타항목여부',
     reg_name   VARCHAR(50) COMMENT '등록자',
     reg_date   DATE COMMENT '등록일',
     udt_name   VARCHAR(50) COMMENT '수정자',
@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS rsa
     sura_seq    bigint AUTO_INCREMENT PRIMARY KEY COMMENT '답변번호 (PK)',
     sur_seq     bigint      NOT NULL COMMENT '설문번호 (FK)',
     suri_seq    bigint      NOT NULL COMMENT '문항번호 (FK)',
-    sura_no     VARCHAR(8)  NOT NULL COMMENT '답변번호 (1~)',
+    sura_no     INT  NOT NULL COMMENT '답변번호 (1~)',
     sura_item   VARCHAR(5) COMMENT '답변항목 (12345,24,123 등등) + 0:기타',
     suri_reason VARCHAR(200) COMMENT '선택사유 (12345일 경우)',
     sura_detail VARCHAR(200) COMMENT '답변내용 (0일 경우)',
@@ -147,7 +147,7 @@ CREATE TABLE IF NOT EXISTS rsr
 (
     surr_seq bigint AUTO_INCREMENT PRIMARY KEY COMMENT '답변번호 (PK)',
     sur_seq  bigint      NOT NULL COMMENT '설문번호 (FK)',
-    surr_no  VARCHAR(8)  NOT NULL COMMENT '답변번호 (1~)',
+    surr_no  INT  NOT NULL COMMENT '답변번호 (1~)',
     surr_cnt VARCHAR(8) COMMENT '답변수',
     surr_rate VARCHAR(8) COMMENT '답변비율',
     INDEX surr_no_idx (surr_no)

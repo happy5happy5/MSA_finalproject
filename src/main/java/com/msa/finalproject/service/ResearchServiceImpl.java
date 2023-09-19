@@ -1,10 +1,7 @@
 package com.msa.finalproject.service;
 
 import com.msa.finalproject.mapper.ResearchMapper;
-import com.msa.finalproject.model.RS;
-import com.msa.finalproject.model.RSDTO;
-import com.msa.finalproject.model.RSsDTO;
-import com.msa.finalproject.model.RequestRSDTO;
+import com.msa.finalproject.model.*;
 import com.msa.finalproject.util.Statics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -69,5 +66,15 @@ public class ResearchServiceImpl implements ResearchService {
         rssDTO.setKeyword(keyword);
         rssDTO.setColumn(column);
         return rssDTO;
+    }
+
+    @Override
+    public void createRS(RSDTO rsDTO) {
+        researchMapper.createRS(rsDTO);
+        List<RSI> suri = rsDTO.getSuri();
+        for (RSI _suri : suri) {
+            _suri.setSur_seq(rsDTO.getSur_seq());
+            researchMapper.createRSI(_suri);
+        }
     }
 }
