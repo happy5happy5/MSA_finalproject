@@ -16,4 +16,6 @@ public interface ResearchService {
     void editRS(RSDTO rsDTO);
 
     void createRSA(List<RSA> rsaDTO);
+
+    List<RSA> getRSA(int surSeq);
 }

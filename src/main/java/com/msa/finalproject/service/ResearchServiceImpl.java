@@ -115,4 +115,9 @@ public class ResearchServiceImpl implements ResearchService {
         }
 
     }
+
+    @Override
+    public List<RSA> getRSA(int surSeq) {
+        return researchMapper.getRSA(surSeq);
+    }
 }

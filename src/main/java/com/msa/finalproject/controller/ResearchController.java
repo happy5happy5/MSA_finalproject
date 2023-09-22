@@ -96,4 +96,16 @@ public class ResearchController {
         return "redirect:/research/list";
     }
 
+
+    @GetMapping("/result")
+    public String result(Model model, @RequestParam int sur_seq) {
+        System.out.println("[ResearchController] GET /research/result result()");
+
+        RSDTO rsDTO = researchService.getRS(sur_seq);
+        List<RSA> rsaDTO = researchService.getRSA(sur_seq);
+        model.addAttribute("rsDTO", rsDTO);
+        model.addAttribute("rsaDTO", rsaDTO);
+        return "research/resultform";
+    }
+
 }

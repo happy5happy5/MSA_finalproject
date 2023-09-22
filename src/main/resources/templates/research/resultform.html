@@ -2,9 +2,164 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Title</title>
+    <title>Research Result</title>
+    <link rel="stylesheet" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css">
 </head>
 <body>
+<div th:insert="~{fragments/navbar :: nav_bar('Result')}"></div>
+<div class="container">
+
+    <h3 class="my-4">Research Result</h3>
+
+    <div id="read-only-form">
+        <div class="mb-3">
+            <label for="research-title-input" class="form-label">Title</label>
+            <input type="text" class="form-control" id="research-title-input" name="title"
+                   th:value="${rsDTO.sur_title}" disabled>
+        </div>
+        <div class="mb-3">
+            <label for="research-writer-input" class="form-label">Writer</label>
+            <input type="text" class="form-control" id="research-writer-input" name="writer"
+                   th:value="${rsDTO.reg_name}" disabled>
+        </div>
+        <!--        기간 (달력 팝업)-->
+
+        <div class="mb-3 row">
+            <label for="research-startdate-input" class="col-2 col-form-label">Start Date</label>
+            <div class="col-4">
+                <input type="datetime-local" class="form-control" id="research-startdate-input" name="startdate"
+                       th:value="${rsDTO.sur_sat_date}" disabled>
+            </div>
+
+            <label for="research-enddate-input" class="col-2 col-form-label">End Date</label>
+            <div class="col-4">
+                <input type="datetime-local" class="form-control" id="research-enddate-input" name="enddate"
+                       th:value="${rsDTO.sur_end_date}" disabled>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="research-content-input" class="form-label">Content</label>
+            <textarea class="form-control" id="research-content-input" name="content" rows="6"
+                      disabled th:text="${rsDTO.sur_desc}"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Questions</label>
+            <!-- Display questions in read-only mode -->
+            <div id="research-query-container">
+            </div>
+        </div>
+    </div>
+</div>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    let rsDTO = [[${rsDTO}]];
+    let rsaDTO = [[${rsaDTO}]];
+    /*]]>*/
+    console.log(rsDTO);
+    console.log(rsaDTO);
+</script>
+<script>
+    // todo: 일단 이렇게 하고 나중에 수정 하자
+
+    let result={}
+
+    rsaDTO.forEach(function (rsa, index) {
+        // console.log("question number::",rsa.sura_no)
+        // console.log("option number::",rsa.sura_item)
+        let answer=rsa.sura_item.split("")
+        // console.log("answer::",answer)
+        // if (result[rsa.sura_no] === undefined) then make it!!!!!!
+        // console.log(result[rsa.sura_no]);
+        if (result[rsa.sura_no] === undefined){
+            result[rsa.sura_no] = {}
+        }
+        if(result[rsa.sura_no]['total'] === undefined){
+            result[rsa.sura_no]['total'] = 0
+        }
+
+        for(let i=0; i<answer.length; i++){
+            if (result[rsa.sura_no][answer[i]] === undefined){
+                result[rsa.sura_no][answer[i]] = 0
+            }
+            result[rsa.sura_no][answer[i]] += 1
+            result[rsa.sura_no]['total'] += 1
+        }
+
+    });
+    console.log(result)
+
+</script>
+<script>
+    function createQuestionElement(question) {
+        const questionContainer = document.createElement("div");
+        questionContainer.classList.add("suri-form", "mb-3", "border", "border-primary", "p-5");
+
+        // Create a label and input for the question title
+        const titleLabel = document.createElement("label");
+        titleLabel.classList.add("form-label");
+        titleLabel.textContent = `Question${question.suri_no}:`;
+        questionContainer.appendChild(titleLabel);
+
+        const titleInput = document.createElement("input");
+        titleInput.type = "text";
+        titleInput.classList.add("form-control");
+        titleInput.disabled = true;
+        titleInput.value = question.suri_title;
+        questionContainer.appendChild(titleInput);
+
+        // Loop through and create input elements for the question options
+        for (let i = 1; i <= 5; i++) {
+            if (question[`suri_que${i}`] === '') {
+                break
+            }
+            const optionLabel = document.createElement("label");
+            optionLabel.classList.add("form-label");
+            optionLabel.textContent = `Option ${i}:`;
+            questionContainer.appendChild(optionLabel);
+
+            const resultDiv = document.createElement("div");
+            if(result[question.suri_no] === undefined||(isNaN(Math.round(result[question.suri_no][`${i}`]/result[question.suri_no]['total']*100)))){
+                resultDiv.textContent = `Result: 0% Total: ${result[question.suri_no]['total']}`;
+
+                console.log("여기가 값이 없는 곳")
+            }else{
+                resultDiv.textContent = `Result: ${Math.round(result[question.suri_no][`${i}`]/result[question.suri_no]['total']*100)}% Total: ${result[question.suri_no]['total']}`;
+            }
+            questionContainer.appendChild(resultDiv);
+
+            const optionInput = document.createElement("input");
+            optionInput.type = "text";
+            optionInput.classList.add("form-control");
+            optionInput.classList.add("ms-3");
+            optionInput.disabled = true;
+
+            if (`suri_que${i}` in question) {
+                optionInput.value = question[`suri_que${i}`];
+                questionContainer.appendChild(optionInput);
+            }
+
+        }
+
+        return questionContainer;
+    }
+
+    // Function to populate the container with questions
+    function populateQuestions() {
+        const container = document.getElementById("research-query-container");
+        for (let i = 0; i < rsDTO.suri.length; i++) {
+            const question = rsDTO.suri[i];
+            const questionElement = createQuestionElement(question);
+            container.appendChild(questionElement);
+        }
+    }
+
+    // Call the function to populate questions when the page loads
+    window.addEventListener("load", populateQuestions);
+
+</script>
+
 
 </body>
 </html>

@@ -64,4 +64,7 @@ public interface ResearchMapper {
 
     @Insert("INSERT INTO rsa (sur_seq, suri_seq, sura_item, sura_no, sura_reason,sura_name, sura_date) VALUES (#{sur_seq}, #{suri_seq},#{sura_item}, #{sura_no}, #{sura_reason}, #{sura_name}, #{sura_date})" )
     void createRSA(RSA rsa);
+
+    @Select("SELECT * FROM rsa WHERE sur_seq = #{sur_seq}")
+    List<RSA> getRSA(int surSeq);
 }
