@@ -27,24 +27,24 @@
         <div class="form-control" th:text="${rsDTO.reg_name}"></div>
     </div>
 
-        <!-- Hidden field to store survey sequence -->
-        <input type="hidden" name="sur_seq" th:value="${rsDTO.sur_seq}"/>
+    <!-- Hidden field to store survey sequence -->
+    <input type="hidden" name="sur_seq" th:value="${rsDTO.sur_seq}"/>
 
-        <!-- Display survey questions -->
-        <div id="research-query-container">
+    <!-- Display survey questions -->
+    <div id="research-query-container">
 
-        </div>
+    </div>
 
-        <!-- Input for overall survey comments -->
-        <div class="mb-3">
-            <label class="form-label">Overall Comments:</label>
-            <label>
-                <textarea class="form-control" name="suri_overall_comments" rows="6"></textarea>
-            </label>
-        </div>
+    <!-- Input for overall survey comments -->
+    <div class="mb-3">
+        <label class="form-label">Overall Comments:</label>
+        <label>
+            <textarea class="form-control" name="suri_overall_comments" rows="6"></textarea>
+        </label>
+    </div>
 
-        <!-- Submit button -->
-        <button type="submit" class="btn btn-primary" onclick="submitSurvey()">Submit Survey</button>
+    <!-- Submit button -->
+    <button type="submit" class="btn btn-primary" onclick="submitSurvey()">Submit Survey</button>
 </div>
 
 <script th:inline="javascript">
@@ -84,7 +84,6 @@
         // Check if suri_multi is '1' (radio) or not (checkbox)
         const isRadio = question.suri_multi === '1';
         // console.log(question.suri_multi)
-
 
 
         // Dynamically add options based on data in rsDTO
@@ -151,15 +150,15 @@
             const multi = questionElement.querySelector("input[type=hidden]").value;
             // console.log(multi);
             // console.log(multi==='1');
-            if(multi==='1'){
-            //     그대로
-            }else{
-            //     체크 박스의 최대 선택될수있는 개수 제한
+            if (multi === '1') {
+                //     그대로
+            } else {
+                //     체크 박스의 최대 선택될수있는 개수 제한
                 const checkbox = questionElement.querySelectorAll("input[type=checkbox]");
-                checkbox.forEach((item)=>{
-                    item.addEventListener("click",function (e){
+                checkbox.forEach((item) => {
+                    item.addEventListener("click", function (e) {
                         const checked = questionElement.querySelectorAll("input[type=checkbox]:checked");
-                        if(checked.length>multi){
+                        if (checked.length > multi) {
                             alert(`최대 ${multi}개까지 선택 가능합니다.`);
                             e.preventDefault();
                         }
@@ -173,7 +172,7 @@
     window.addEventListener("load", populateQuestions);
 </script>
 <script>
-function submitSurvey(){
+    function submitSurvey() {
 //     rsDTO.suri 의 갯수만큼 반복문을 돌려서
 //     rsaDTO 라는 배열에 객체를 만들어서 넣어준다.
 //     객체의 속성은 sur_seq, suri_seq, sura_no, sura_item, sura_reason,sura_name, sura_date 이다.
@@ -185,66 +184,66 @@ function submitSurvey(){
 //     sura_date는 현재 날짜가 들어가야한다.
 
 // 초기화된 rsaDTO 배열
-    let rsaDTO = [];
+        let rsaDTO = [];
 
-    // 현재 날짜를 생성
-    const currentDate = new Date();
-    const formattedDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
+        // 현재 날짜를 생성
+        const currentDate = new Date();
+        const formattedDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
 
-    // rsDTO.suri를 반복하며 RSA 객체를 생성하여 rsaDTO 배열에 추가
-    rsDTO.suri.forEach(question => {
-        // 사용자가 선택한 답변의 값 (sura_item)
-        let suraItem = "";
+        // rsDTO.suri를 반복하며 RSA 객체를 생성하여 rsaDTO 배열에 추가
+        rsDTO.suri.forEach(question => {
+            // 사용자가 선택한 답변의 값 (sura_item)
+            let suraItem = "";
 
-        // 사용자가 선택한 옵션을 suraItem에 추가
-        for (let i = 1; i <= 5; i++) {
-            const existOption = question[`suri_que${i}`];
-            if (!existOption) {
-                console.log(`Question ${question.suri_no} has no more options`)
-                break; // Stop if no more options
+            // 사용자가 선택한 옵션을 suraItem에 추가
+            for (let i = 1; i <= 5; i++) {
+                const existOption = question[`suri_que${i}`];
+                if (!existOption) {
+                    console.log(`Question ${question.suri_no} has no more options`)
+                    break; // Stop if no more options
+                }
+                //     실제 html 태그에서 해당하는 값 가져와서 sura_item 만들기
+                const optionInput = document.querySelector(`input[id=suri_answer_${question.suri_no}_${i}]:checked`);
+                if (optionInput) {
+                    suraItem += `${i}`;
+                }
             }
-        //     실제 html 태그에서 해당하는 값 가져와서 sura_item 만들기
-            const optionInput = document.querySelector(`input[id=suri_answer_${question.suri_no}_${i}]:checked`);
-            if (optionInput) {
-                suraItem += `${i}`;
+            // 사용자가 입력한 이유 (sura_reason)
+            let suraReason = '';
+            if (question.suri_etc === 'yes') {
+                console.log(`Question ${question.suri_no} has reason`)
+                suraReason = document.querySelector(`textarea[name=suri_reason_${question.suri_no}]`).value;
             }
-        }
-        // 사용자가 입력한 이유 (sura_reason)
-        let suraReason='';
-        if(question.suri_etc === 'yes'){
-            console.log(`Question ${question.suri_no} has reason`)
-            suraReason = document.querySelector(`textarea[name=suri_reason_${question.suri_no}]`).value;
-        }
 
-        // RSA 객체 생성 및 값 할당
-        const rsaObject = {
-            sur_seq: question.sur_seq,
-            suri_seq: question.suri_seq,
-            sura_no: question.suri_no,
-            sura_item: suraItem,
-            sura_reason: suraReason,
-            sura_name: "사용자 이름",
-            sura_date: formattedDate
-        };
+            // RSA 객체 생성 및 값 할당
+            const rsaObject = {
+                sur_seq: question.sur_seq,
+                suri_seq: question.suri_seq,
+                sura_no: question.suri_no,
+                sura_item: suraItem,
+                sura_reason: suraReason,
+                sura_name: "사용자 이름",
+                sura_date: formattedDate
+            };
 
-        // rsaDTO 배열에 RSA 객체 추가
-        rsaDTO.push(rsaObject);
-    });
-
-    // 생성된 rsaDTO 배열을 서버로 전송
-    // console.log(rsaDTO);
-    /* global axios */
-    axios.post("/research/start", rsaDTO)
-        .then(response => {
-            console.log(response);
-            alert("설문이 완료되었습니다.");
-            location.href = "/research/list";
-        })
-        .catch(error => {
-            console.log(error);
-            alert("설문 제출에 실패하였습니다.");
+            // rsaDTO 배열에 RSA 객체 추가
+            rsaDTO.push(rsaObject);
         });
-}
+
+        // 생성된 rsaDTO 배열을 서버로 전송
+        // console.log(rsaDTO);
+        /* global axios */
+        axios.post("/research/start", rsaDTO)
+            .then(response => {
+                console.log(response);
+                alert("설문이 완료되었습니다.");
+                location.href = "/research/list";
+            })
+            .catch(error => {
+                console.log(error);
+                alert("설문 제출에 실패하였습니다.");
+            });
+    }
 </script>
 </body>
 </html>

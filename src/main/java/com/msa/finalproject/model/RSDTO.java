@@ -29,7 +29,7 @@ public class RSDTO {
     private List<String> deletedQueryId;
 
 
-    public RSDTO(RS rs){
+    public RSDTO(RS rs) {
         this.no = rs.getNo();
         this.sur_seq = rs.getSur_seq();
         this.sur_title = rs.getSur_title();

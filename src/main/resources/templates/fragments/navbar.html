@@ -4,8 +4,9 @@
         function updateAxiosHeaders() {
             const token = sessionStorage.getItem("token");
             /* global axios */
-            axios.defaults.headers.common['Authorization'] = token ? token : null;
-            console.log(axios.defaults.headers.common['Authorization'])
+            axios["defaults"].headers["common"]['Authorization'] = token ? token : null;
+            console.log(axios["defaults"].headers["common"]['Authorization'])
+            console.log(axios["defaults"].headers["common"]['Authorization'])
         }
 
         // 페이지 로딩 시 초기 설정
@@ -96,16 +97,16 @@
             </div>
         </div>
     </nav>
-<!--    <script>-->
-<!--        // JavaScript를 사용하여 스크롤 이벤트를 감지하고 navbar 배경 색상 변경-->
-<!--        window.addEventListener('scroll', function () {-->
-<!--            let navbar = document.querySelector('.navbar');-->
-<!--            if (window.scrollY > 50) {-->
-<!--                navbar.classList.add('navbar-scrolled');-->
-<!--            } else {-->
-<!--                navbar.classList.remove('navbar-scrolled');-->
-<!--            }-->
-<!--        });-->
-<!--    </script>-->
+    <!--    <script>-->
+    <!--        // JavaScript 사용하여 스크롤 이벤트를 감지하고 navbar 배경 색상 변경-->
+    <!--        window.addEventListener('scroll', function () {-->
+    <!--            let navbar = document.querySelector('.navbar');-->
+    <!--            if (window.scrollY > 50) {-->
+    <!--                navbar.classList.add('navbar-scrolled');-->
+    <!--            } else {-->
+    <!--                navbar.classList.remove('navbar-scrolled');-->
+    <!--            }-->
+    <!--        });-->
+    <!--    </script>-->
     <script src="/webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
 </div>

@@ -63,24 +63,24 @@
 <script>
     // todo: 일단 이렇게 하고 나중에 수정 하자
 
-    let result={}
+    let result = {}
 
     rsaDTO.forEach(function (rsa) {
         // console.log("question number::",rsa.sura_no)
         // console.log("option number::",rsa.sura_item)
-        let answer=rsa.sura_item.split("")
+        let answer = rsa.sura_item.split("")
         // console.log("answer::",answer)
         // if (result[rsa.sura_no] === undefined) then make it!!!!!!
         // console.log(result[rsa.sura_no]);
-        if (result[rsa.sura_no] === undefined){
+        if (result[rsa.sura_no] === undefined) {
             result[rsa.sura_no] = {}
         }
-        if(result[rsa.sura_no]['total'] === undefined){
+        if (result[rsa.sura_no]['total'] === undefined) {
             result[rsa.sura_no]['total'] = 0
         }
 
-        for(let i=0; i<answer.length; i++){
-            if (result[rsa.sura_no][answer[i]] === undefined){
+        for (let i = 0; i < answer.length; i++) {
+            if (result[rsa.sura_no][answer[i]] === undefined) {
                 result[rsa.sura_no][answer[i]] = 0
             }
             result[rsa.sura_no][answer[i]] += 1
@@ -120,12 +120,12 @@
             questionContainer.appendChild(optionLabel);
 
             const resultDiv = document.createElement("div");
-            if(result[question.suri_no] === undefined||(isNaN(Math.round(result[question.suri_no][`${i}`]/result[question.suri_no]['total']*100)))){
+            if (result[question.suri_no] === undefined || (isNaN(Math.round(result[question.suri_no][`${i}`] / result[question.suri_no]['total'] * 100)))) {
                 resultDiv.textContent = `Result: 0% Total: ${result[question.suri_no]['total']}`;
 
                 console.log("여기가 값이 없는 곳")
-            }else{
-                resultDiv.textContent = `Result: ${Math.round(result[question.suri_no][`${i}`]/result[question.suri_no]['total']*100)}% Total: ${result[question.suri_no]['total']}`;
+            } else {
+                resultDiv.textContent = `Result: ${Math.round(result[question.suri_no][`${i}`] / result[question.suri_no]['total'] * 100)}% Total: ${result[question.suri_no]['total']}`;
             }
             questionContainer.appendChild(resultDiv);
 

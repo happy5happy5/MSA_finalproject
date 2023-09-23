@@ -17,11 +17,12 @@ public class RequestRSDTO {
     private String column;
     private String keyword;
 
-    public String getColumn(){
+    public String getColumn() {
         if (this.column == null) return "";
         return this.column;
     }
-    public String getKeyword(){
+
+    public String getKeyword() {
         if (this.keyword == null) return "";
         return this.keyword;
     }
