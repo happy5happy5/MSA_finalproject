@@ -86,7 +86,7 @@
         // Create a label and input for the question title
         const titleLabel = document.createElement("label");
         titleLabel.classList.add("form-label");
-        titleLabel.textContent = "Question:";
+        titleLabel.textContent = `질문  ${question.suri_no}`;
         questionContainer.appendChild(titleLabel);
 
         const titleInput = document.createElement("input");
@@ -103,7 +103,7 @@
             }
             const optionLabel = document.createElement("label");
             optionLabel.classList.add("form-label");
-            optionLabel.textContent = `Option ${i}:`;
+            optionLabel.textContent = `선택지 ${i}:`;
             questionContainer.appendChild(optionLabel);
 
             const optionInput = document.createElement("input");
@@ -134,6 +134,7 @@
 
     // Call the function to populate questions when the page loads
     window.addEventListener("load", populateQuestions);
+    // todo: 여기서부터 설문 조사 시작 버튼 클릭 이벤트 핸들러 -> 위치 자체를 옴겨야 하는 것도 존재
     // window.addEventListener("load", function () {
     //     // 여기에 설문 조사 시작 동작
     //     if (rsDTO.sur_status === '진행 중') {

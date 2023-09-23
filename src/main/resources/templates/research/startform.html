@@ -62,7 +62,7 @@
         // Create a label and input for the question title
         const titleLabel = document.createElement("label");
         titleLabel.classList.add("form-label");
-        titleLabel.textContent = `Question ${question.suri_no}`;
+        titleLabel.textContent = `질문 ${question.suri_no}`;
         questionContainer.appendChild(titleLabel);
 
         const titleInput = document.createElement("div");
@@ -96,7 +96,7 @@
             const optionLabel = document.createElement("label");
             optionLabel.classList.add("form-label");
             optionLabel.classList.add("ms-3");
-            optionLabel.textContent = `Option ${i}:`;
+            optionLabel.textContent = `선택지 ${i}:`;
             questionContainer.appendChild(optionLabel);
 
             const optionInput = document.createElement("input");
