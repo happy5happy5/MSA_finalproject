@@ -1,6 +1,9 @@
 package com.msa.finalproject.controller;
 
-import com.msa.finalproject.model.*;
+import com.msa.finalproject.model.RSA;
+import com.msa.finalproject.model.RSDTO;
+import com.msa.finalproject.model.RSsDTO;
+import com.msa.finalproject.model.RequestRSDTO;
 import com.msa.finalproject.service.ResearchService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,7 +28,7 @@ public class ResearchController {
         this.researchService = researchService;
     }
 
-    @GetMapping({"/","/list"})
+    @GetMapping({"/", "/list"})
     public String research(Model model, RequestRSDTO requestRSDTO) {
         logger.info("GET /research/list research()");
         RSsDTO rssDTO = researchService.getList(requestRSDTO);

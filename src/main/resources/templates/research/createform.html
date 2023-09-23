@@ -88,12 +88,12 @@
 <script>
     // 페이지 로드 시 초기 데이터를 rsDTO 가져와서 suri 폼을 생성합니다.
 
-    window.addEventListener('load', ()=>{
+    window.addEventListener('load', () => {
         // localStorage 저장된 rsDTO 있을 경우 가져옵니다.
-        if (localStorage.getItem('rsDTO')&&confirm("이전에 작성한 설문이 있습니다. 불러오시겠습니까?"+"\n"+"(취소 시 새로 작성됩니다.)")) {
+        if (localStorage.getItem('rsDTO') && confirm("이전에 작성한 설문이 있습니다. 불러오시겠습니까?" + "\n" + "(취소 시 새로 작성됩니다.)")) {
             rsDTO = JSON.parse(localStorage.getItem('rsDTO'));
             loadRS();
-        }else{
+        } else {
             localStorage.removeItem('rsDTO');
         }
 
@@ -103,7 +103,7 @@
 
     // rsDTO 이용하여 초기 suri 폼을 생성하는 함수
     function loadRS() {
-        if(!rsDTO)return;
+        if (!rsDTO) return;
         let suriList = rsDTO.suri;
         suriList.sort((a, b) => {
             return a.suri_no - b.suri_no;
@@ -148,7 +148,7 @@
 
             // Set the Suri title and options (1 to 5)
             for (let j = 1; j <= 5; j++) {
-                 // Use an empty string if the option is not available
+                // Use an empty string if the option is not available
                 document.querySelector(`input[name^="suri_que${j}_${questionNumber}"]`).value = suri[`suri_que${j}`] || '';
             }
 
@@ -160,7 +160,7 @@
             document.querySelector(`input[name^="suri_etc_${questionNumber}"][value="${selectedEtcValue}"]`).checked = true;
 
             // Set the Suri title (if available)
-             // Use an empty string if the title is not available
+            // Use an empty string if the title is not available
             document.querySelector(`input[name^="suri_title_${questionNumber}"]`).value = suri.suri_title || '';
         }
 
@@ -241,7 +241,7 @@
         const questionTitleLabel = createLabel(`Question ${questionNumber}:`);
         suriForm.appendChild(questionTitleLabel);
 
-        const questionTitleInput = createTextInput(`suri_title_${questionNumber}`,questionNumber);
+        const questionTitleInput = createTextInput(`suri_title_${questionNumber}`, questionNumber);
         suriForm.appendChild(questionTitleInput);
         addValidationAndLimit(questionTitleInput, 200);
 
@@ -253,7 +253,7 @@
             const questionOptionLabel = createLabel(`Option ${i}:`);
             optionContainer.appendChild(questionOptionLabel);
 
-            const questionOptionInput = createTextInput(`suri_que${i}_${questionNumber}`,questionNumber);
+            const questionOptionInput = createTextInput(`suri_que${i}_${questionNumber}`, questionNumber);
             optionContainer.appendChild(questionOptionInput);
             addValidationAndLimit(questionOptionInput, 100);
             // 유효성 검사와 option 구분 짓기 위한 비어있는 div 요소 추가
@@ -325,9 +325,9 @@
         radioInput.value = label.toLowerCase();
 
         // checked 값은 rsDTO 가져오고 없다면 No로 설정
-            if (isSelected) {
-                radioInput.checked = true;
-            }
+        if (isSelected) {
+            radioInput.checked = true;
+        }
 
         const radioLabel = document.createElement('label');
         radioLabel.setAttribute('for', `suri_etc_${questionNumber}_${label.toLowerCase()}`);

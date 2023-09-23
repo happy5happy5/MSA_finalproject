@@ -65,8 +65,8 @@
             <button type="button" class="btn btn-primary" id="remove-question-button" onclick="deleteSuriForm()">Minus
                 Query
             </button>
-<!--            <button type="button" class="btn btn-primary" id="save-button" onclick="updateResearchDTO()">Save Draft-->
-<!--            </button>-->
+            <!--            <button type="button" class="btn btn-primary" id="save-button" onclick="updateResearchDTO()">Save Draft-->
+            <!--            </button>-->
             <button type="button" class="btn btn-primary" id="submit-button" onclick="submitResearchDTO()">Submit
             </button>
         </div>
@@ -81,7 +81,7 @@
 <script th:inline="javascript">
     /*<![CDATA[*/
     let rsDTO = [[${rsDTO}]];
-    let deletedQueryId=[];
+    let deletedQueryId = [];
     console.log(rsDTO)
     // let deletedQueryId=[];
     /*]]>*/
@@ -200,7 +200,7 @@
         // num-of-questions-input
         // rs.que_cnt = document.getElementById('num-of-questions-input').value;
         // deletedQueryId
-        rsDTO.deletedQueryId=deletedQueryId
+        rsDTO.deletedQueryId = deletedQueryId
 
 
         // TODO: 중간 저장 데이터 서버 작업
@@ -244,7 +244,7 @@
         const suriSeqInput = createHiddenInput(`suri_seq_${questionNumber}`);
 
         // suriSeqInput.value = rsDTO.suri[questionNumber - 1].suri_seq;
-        suriSeqInput.value = rsDTO.suri[questionNumber - 1]?rsDTO.suri[questionNumber - 1].suri_seq:'';
+        suriSeqInput.value = rsDTO.suri[questionNumber - 1] ? rsDTO.suri[questionNumber - 1].suri_seq : '';
         suriForm.appendChild(suriSeqInput);
 
 
@@ -262,7 +262,7 @@
         const questionTitleLabel = createLabel(`Question ${questionNumber}:`);
         suriForm.appendChild(questionTitleLabel);
 
-        const questionTitleInput = createTextInput(`suri_title_${questionNumber}`,questionNumber);
+        const questionTitleInput = createTextInput(`suri_title_${questionNumber}`, questionNumber);
         suriForm.appendChild(questionTitleInput);
         addValidationAndLimit(questionTitleInput, 200);
 
@@ -274,7 +274,7 @@
             const questionOptionLabel = createLabel(`Option ${i}:`);
             optionContainer.appendChild(questionOptionLabel);
 
-            const questionOptionInput = createTextInput(`suri_que${i}_${questionNumber}`,questionNumber);
+            const questionOptionInput = createTextInput(`suri_que${i}_${questionNumber}`, questionNumber);
             optionContainer.appendChild(questionOptionInput);
             addValidationAndLimit(questionOptionInput, 100);
             // 유효성 검사와 option 구분 짓기 위한 비어있는 div 요소 추가
@@ -314,9 +314,9 @@
         const container = document.getElementById('research-query-container');
         container.appendChild(suriForm);
 
-        if(suriForm.querySelector('input[name^="suri_seq_"]')){
+        if (suriForm.querySelector('input[name^="suri_seq_"]')) {
             let suri_seq = suriForm.querySelector('input[name^="suri_seq_"]').value
-            deletedQueryId=deletedQueryId.filter(_suri_seq=> _suri_seq!==suri_seq)
+            deletedQueryId = deletedQueryId.filter(_suri_seq => _suri_seq !== suri_seq)
         }
     }
 
@@ -464,11 +464,11 @@
 
     function deleteSuriForm() {
         let suriForms = document.querySelector('#research-query-container')
-        if(suriForms.lastChild){
+        if (suriForms.lastChild) {
             // console.log(suriForms.lastChild.querySelector('input[name^="suri_seq_"]').value)
-            let suri_seq=suriForms.lastElementChild.querySelector('input[name^="suri_seq_"]').value
-            if (suri_seq){
-                if(deletedQueryId.filter(_suri_seq=> _suri_seq===suri_seq).length===0){
+            let suri_seq = suriForms.lastElementChild.querySelector('input[name^="suri_seq_"]').value
+            if (suri_seq) {
+                if (deletedQueryId.filter(_suri_seq => _suri_seq === suri_seq).length === 0) {
                     deletedQueryId.push(suri_seq)
                 }
             }

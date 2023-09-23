@@ -27,7 +27,7 @@ public class ResearchServiceImpl implements ResearchService {
         String keyword = requestRSDTO.getKeyword();
         Integer totalSeq = researchMapper.getTotalSeq(column, keyword);
 
-        if (requestRSDTO.getPage() == null || (!(requestRSDTO.getPageToGo() == null) &&requestRSDTO.getPageToGo().equals("1"))) {
+        if (requestRSDTO.getPage() == null || (!(requestRSDTO.getPageToGo() == null) && requestRSDTO.getPageToGo().equals("1"))) {
             List<RS> rss = researchMapper.getListWithOnlyPageSize(PAGE_SIZE, column, keyword);
             if (rss.isEmpty()) {
                 return null;
@@ -49,13 +49,13 @@ public class ResearchServiceImpl implements ResearchService {
         List<RS> rss;
         int offset;
         if (page == pageToGo) {
-            rss = researchMapper.getRSsFromEnd(PAGE_SIZE, startSeq + 1, 0,column, keyword);
+            rss = researchMapper.getRSsFromEnd(PAGE_SIZE, startSeq + 1, 0, column, keyword);
         } else if (page < pageToGo) {
             offset = ((pageToGo - page) - 1) * PAGE_SIZE;
-            rss = researchMapper.getRSsFromEnd( PAGE_SIZE,endSeq,offset, column, keyword);
+            rss = researchMapper.getRSsFromEnd(PAGE_SIZE, endSeq, offset, column, keyword);
         } else {
             offset = ((page - pageToGo) - 1) * PAGE_SIZE;
-            rss = researchMapper.getRSsFromStart(PAGE_SIZE,startSeq,offset, column, keyword);
+            rss = researchMapper.getRSsFromStart(PAGE_SIZE, startSeq, offset, column, keyword);
             Collections.reverse(rss);
         }
 
