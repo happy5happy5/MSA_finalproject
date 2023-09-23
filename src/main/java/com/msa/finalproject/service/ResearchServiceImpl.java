@@ -43,14 +43,14 @@ public class ResearchServiceImpl implements ResearchService {
         int page = Integer.parseInt(requestRSDTO.getPage());
         int pageToGo = Integer.parseInt(requestRSDTO.getPageToGo());
 //        현재 페이지가 1일때만 startSeq 와 endSeq 가 null 이다.
-        int startSeq = Integer.parseInt(requestRSDTO.getStartBoard());
-        int endSeq = Integer.parseInt(requestRSDTO.getEndBoard());
+        int startSeq = Integer.parseInt(requestRSDTO.getStartSeq());
+        int endSeq = Integer.parseInt(requestRSDTO.getEndSeq());
 
         List<RS> rss;
         int offset;
         if (page == pageToGo) {
             rss = researchMapper.getRSsFromEnd(PAGE_SIZE, startSeq + 1, 0,column, keyword);
-        } else if (page > pageToGo) {
+        } else if (page < pageToGo) {
             offset = ((pageToGo - page) - 1) * PAGE_SIZE;
             rss = researchMapper.getRSsFromEnd( PAGE_SIZE,endSeq,offset, column, keyword);
         } else {

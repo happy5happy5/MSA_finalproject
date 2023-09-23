@@ -11,8 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class RequestRSDTO {
     private String page;
-    private String startBoard;
-    private String endBoard;
+    private String startSeq;
+    private String endSeq;
     private String pageToGo;
     private String column;
     private String keyword;
