@@ -3,7 +3,7 @@
     <script>
         function updateAxiosHeaders() {
             const token = sessionStorage.getItem("token");
-            // console.log("token:", token)
+            /* global axios */
             axios.defaults.headers.common['Authorization'] = token ? token : null;
             console.log(axios.defaults.headers.common['Authorization'])
         }

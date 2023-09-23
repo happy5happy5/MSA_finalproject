@@ -151,6 +151,7 @@
 <script>
     function create_btn() {
         let loc = "/research"
+        /* global axios */
         axios.get(loc + '/create')
             .then(function () {
                 // console.log(response);

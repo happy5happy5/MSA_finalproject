@@ -25,14 +25,16 @@ public class RequestRSDTO {
         if (this.keyword == null) return "";
         return this.keyword;
     }
-    public void setColumn(String column) {
-        if(column == null) this.column = "";
-        else this.column = column;
-    }
 
-    public void setKeyword(String keyword) {
-        if(keyword == null) this.keyword = "";
-        else this.keyword = keyword;
-    }
+//    public void setColumn(String column) {
+//        if(column == null) this.column = "";
+//        else this.column = column;
+//
+//
+//    public void setKeyword(String keyword) {
+//        if(keyword == null) this.keyword = "";
+//        else this.keyword = keyword;
+//    }
+
 
 }

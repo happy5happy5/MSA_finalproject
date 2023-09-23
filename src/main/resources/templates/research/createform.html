@@ -484,6 +484,7 @@
         const requestData = JSON.stringify(rsDTO);
 
         // Axios 사용하여 POST 요청 전송
+        /* global axios */
         axios.post('/research/create', requestData, {
             headers: {
                 'Content-Type': 'application/json',

@@ -91,12 +91,12 @@
     // 페이지 로드 시 초기 데이터를 rsDTO에서 가져와서 suri 폼을 생성합니다.
 
     window.addEventListener('load', function () {
-        // localStorage에 저장된 rsDTO가 있을 경우 가져옵니다.
+        // localStorage 저장된 rsDTO가 있을 경우 가져옵니다.
         // if (localStorage.getItem('rsDTO')) {
         //     rsDTO = JSON.parse(localStorage.getItem('rsDTO'));
         // }
         loadRS();
-        // research-title-input의 value를 가져옵니다.
+        // research-title-input value를 가져옵니다.
 
     });
 
@@ -113,7 +113,7 @@
                 addSuriForm(i);
             }
         }
-        //     rsDTO의 title content date 값을 이용하여 초기 값 설정
+        //     rsDTO title content date 값을 이용하여 초기 값 설정
         document.getElementById('research-title-input').value = rsDTO.sur_title;
         document.getElementById('research-content-input').value = rsDTO.sur_desc;
         document.getElementById('research-startdate-input').value = rsDTO.sur_sat_date;
@@ -122,7 +122,7 @@
         const researchTitleInput = document.getElementById('research-title-input');
         const titleHelp = document.getElementById('research-title-input-help');
 
-        // value의 length를 계산하고 내용을 업데이트합니다.
+        // value length 계산하고 내용을 업데이트합니다.
         const inputLength = researchTitleInput.value.length;
         titleHelp.textContent = `${inputLength} / 100 characters`;
 
@@ -153,7 +153,7 @@
             // Set the Suri multi value
             document.querySelector(`input[name^="suri_multi_${questionNumber}"]`).value = suri.suri_multi;
 
-            // Set the selected Suri etc radio button (Yes or No)
+            // Set the selected Suri etc. radio button (Yes or No)
             const selectedEtcValue = suri.suri_etc || 'No'; // Use 'No' as the default if not available
             document.querySelector(`input[name^="suri_etc_${questionNumber}"][value="${selectedEtcValue}"]`).checked = true;
 
@@ -211,7 +211,7 @@
         //     .catch(function (error) {
         //         console.log(error);
         //     });
-        // localStorage에 rsDTO 저장
+        // localStorage rsDTO 저장
         localStorage.setItem('rsDTO', JSON.stringify(rsDTO));
 
 
@@ -277,7 +277,7 @@
             const questionOptionInput = createTextInput(`suri_que${i}_${questionNumber}`,questionNumber);
             optionContainer.appendChild(questionOptionInput);
             addValidationAndLimit(questionOptionInput, 100);
-            // 유효성 검사와 option을 구분 짓기 위한 비어있는 div 요소 추가
+            // 유효성 검사와 option 구분 짓기 위한 비어있는 div 요소 추가
             const optionDiv = document.createElement('div');
             optionDiv.classList.add('mb-3');
             optionContainer.appendChild(optionDiv);
@@ -310,7 +310,7 @@
         suriForm.appendChild(etcOptionsContainer);
 
 
-        // research-query-container에 추가
+        // research-query-container 추가
         const container = document.getElementById('research-query-container');
         container.appendChild(suriForm);
 
@@ -334,7 +334,7 @@
         return label;
     }
 
-    function createTextInput(name,questionNumber) {
+    function createTextInput(name) {
         const input = document.createElement('input');
         input.type = 'text';
         input.classList.add('form-control');
@@ -405,9 +405,9 @@
         questionMultiInput.type = 'number';
         questionMultiInput.classList.add('form-control');
         questionMultiInput.name = `suri_multi_${questionNumber}`;
-        questionMultiInput.min = 1;
-        questionMultiInput.max = 5;
-        questionMultiInput.value = 1;
+        questionMultiInput.min = "1";
+        questionMultiInput.max = "5";
+        questionMultiInput.value = "1";
 
         // Set the value based on data in rsDTO
         // try {
@@ -466,7 +466,7 @@
         let suriForms = document.querySelector('#research-query-container')
         if(suriForms.lastChild){
             // console.log(suriForms.lastChild.querySelector('input[name^="suri_seq_"]').value)
-            let suri_seq=suriForms.lastChild.querySelector('input[name^="suri_seq_"]').value
+            let suri_seq=suriForms.lastElementChild.querySelector('input[name^="suri_seq_"]').value
             if (suri_seq){
                 if(deletedQueryId.filter(_suri_seq=> _suri_seq===suri_seq).length===0){
                     deletedQueryId.push(suri_seq)
@@ -521,7 +521,7 @@
                 suriOptions.push(optionInput);
             }
 
-            // Suri title이 빈칸이 아닌지 확인
+            // Suri title 빈칸이 아닌지 확인
             if (!suriTitleInput.value.trim()) {
                 alert('질문 제목은 빈칸이 될 수 없습니다.');
                 suriTitleInput.focus();
@@ -534,7 +534,7 @@
             let previousOption = true; // 이전 옵션 입력 필드에 값이 있는지 여부
             for (let j = 0; j < suriOptions.length; j++) {
                 const optionInput = suriOptions[j];
-                const optionNumber = parseInt(optionInput.name.match(/\d+/)[0]); // input의 번호 파싱
+                const optionNumber = parseInt(optionInput.name.match(/\d+/)[0]); // input 번호 파싱
                 const optionValue = optionInput.value.trim();
                 currentOption = optionValue !== '';
 
@@ -562,13 +562,14 @@
         // rsDTO 객체를 JSON 형식으로 변환
         const requestData = JSON.stringify(rsDTO);
 
-        // Axios를 사용하여 POST 요청 전송
+        // Axios 사용하여 POST 요청 전송
+        /* global axios */
         axios.post('/research/edit', requestData, {
             headers: {
                 'Content-Type': 'application/json',
             },
         })
-            .then(function (response) {
+            .then(function () {
                 // 성공적으로 서버에서 응답을 받은 경우
                 alert('데이터가 성공적으로 전송되었습니다.');
                 window.location.href = '/research/detail?sur_seq=' + rsDTO.sur_seq;
