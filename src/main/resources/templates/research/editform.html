@@ -10,25 +10,25 @@
 <div th:insert="~{fragments/navbar :: nav_bar('Edit')}"></div>
 <div class="container">
 
-    <h3 class="my-4">Edit Research</h3>
+    <h3 class="my-4">설문조사 수정</h3>
 
     <div id="create-form">
         <div class="mb-3">
-            <label for="research-title-input" class="form-label">Title</label>
+            <label for="research-title-input" class="form-label">설문제목</label>
             <input type="text" class="form-control" id="research-title-input" name="title"
                    th:value="${rsDTO.sur_title}"
                    onkeyup="validateInput(this,100)">
             <small id="research-title-input-help" class="form-text text-muted"></small>
         </div>
         <div class="mb-3">
-            <label for="research-writer-input" class="form-label">Writer</label>
+            <label for="research-writer-input" class="form-label">작성자</label>
             <input type="text" class="form-control" id="research-writer-input" name="writer"
                    th:value="${rsDTO.reg_name}" disabled>
         </div>
         <!--        기간 (달력 팝업)-->
 
         <div class="mb-3 row">
-            <label for="research-startdate-input" class="col-2 col-form-label">Start Date</label>
+            <label for="research-startdate-input" class="col-2 col-form-label">설문시작</label>
             <div class="col-4">
                 <input type="datetime-local" class="form-control" id="research-startdate-input" name="startdate"
                        th:value="${rsDTO.sur_sat_date}"
@@ -36,7 +36,7 @@
                        oninput="document.querySelector('#research-enddate-input').min = this.value;">
             </div>
 
-            <label for="research-enddate-input" class="col-2 col-form-label">End Date</label>
+            <label for="research-enddate-input" class="col-2 col-form-label">설문종료</label>
             <div class="col-4">
                 <input type="datetime-local" class="form-control" id="research-enddate-input" name="enddate"
                        th:value="${rsDTO.sur_end_date}"
@@ -45,11 +45,11 @@
         </div>
 
         <div class="mb-3">
-            <label for="research-content-input" class="form-label">Content</label>
+            <label for="research-content-input" class="form-label">설문내용</label>
             <textarea class="form-control" id="research-content-input" name="content" rows="6"
                       onkeyup="validateInput(this,1000)">[[${rsDTO.sur_desc}]]
             </textarea>
-            <small id="research-content-input-help" class="form-text text-muted">0 / 1000 characters</small>
+            <small id="research-content-input-help" class="form-text text-muted">0 / 1000 자</small>
         </div>
 
         <!--        <div class="mb-3">-->
@@ -60,14 +60,14 @@
         <div class="mb-3">
             <button type="button" class="btn btn-primary" id="add-question-button"
                     onclick="addSuriForm(document.querySelector('#research-query-container').childElementCount + 1)">
-                Plus Query
+                질문 추가
             </button>
-            <button type="button" class="btn btn-primary" id="remove-question-button" onclick="deleteSuriForm()">Minus
-                Query
+            <button type="button" class="btn btn-primary" id="remove-question-button" onclick="deleteSuriForm()">
+                질문 삭제
             </button>
             <!--            <button type="button" class="btn btn-primary" id="save-button" onclick="updateResearchDTO()">Save Draft-->
             <!--            </button>-->
-            <button type="button" class="btn btn-primary" id="submit-button" onclick="submitResearchDTO()">Submit
+            <button type="button" class="btn btn-primary" id="submit-button" onclick="submitResearchDTO()">제출
             </button>
         </div>
         <div id="research-query-container"></div>
@@ -124,13 +124,13 @@
 
         // value length 계산하고 내용을 업데이트합니다.
         const inputLength = researchTitleInput.value.length;
-        titleHelp.textContent = `${inputLength} / 100 characters`;
+        titleHelp.textContent = `${inputLength} / 100 자`;
 
         const researchContentInput = document.getElementById('research-content-input');
         const contentHelp = document.getElementById('research-content-input-help');
 
         const contentLength = researchContentInput.value.length;
-        contentHelp.textContent = `${contentLength} / 1000 characters`;
+        contentHelp.textContent = `${contentLength} / 1000 자`;
 
         // Load the Suri forms
         suriList.sort((a, b) => {
@@ -202,15 +202,6 @@
         // deletedQueryId
         rsDTO.deletedQueryId = deletedQueryId
 
-
-        // TODO: 중간 저장 데이터 서버 작업
-        // axios.post('/research/create/save', rsDTO)
-        //     .then(function (response) {
-        //         console.log(response);
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //     });
         // localStorage rsDTO 저장
         localStorage.setItem('rsDTO', JSON.stringify(rsDTO));
 
@@ -259,7 +250,7 @@
         suriForm.appendChild(suriNoInput);
 
         // 질문 제목 input 생성 및 설정
-        const questionTitleLabel = createLabel(`Question ${questionNumber}:`);
+        const questionTitleLabel = createLabel(`문항 ${questionNumber}:`);
         suriForm.appendChild(questionTitleLabel);
 
         const questionTitleInput = createTextInput(`suri_title_${questionNumber}`, questionNumber);
@@ -271,7 +262,7 @@
 
         // 질문 보기 (1부터 5까지) input 생성 및 설정
         for (let i = 1; i <= 5; i++) {
-            const questionOptionLabel = createLabel(`Option ${i}:`);
+            const questionOptionLabel = createLabel(`선택지 ${i}:`);
             optionContainer.appendChild(questionOptionLabel);
 
             const questionOptionInput = createTextInput(`suri_que${i}_${questionNumber}`, questionNumber);
@@ -293,33 +284,57 @@
         // questionMultiInput.value = 1;
         suriForm.appendChild(questionMultiInput);
 
-        // 질문 etc input 생성 및 설정
-        const etcLabel = createLabel('Select an option:');
-        suriForm.appendChild(etcLabel);
 
-        const etcOptionsContainer = document.createElement('div');
-        etcOptionsContainer.classList.add('mb-3');
+        const questionETCInput = createETCinput(questionNumber);
 
-        // Create radio buttons for "Yes" and "No"
-        const optionYes = createRadioOption(questionNumber, 'Yes', false);
-        const optionNo = createRadioOption(questionNumber, 'No', true);
+        suriForm.appendChild(questionETCInput);
 
-        etcOptionsContainer.appendChild(optionYes);
-        etcOptionsContainer.appendChild(optionNo);
-
-        suriForm.appendChild(etcOptionsContainer);
+        // const etcOptionsContainer = document.createElement('div');
+        //
+        // // 질문 etc input 생성 및 설정
+        // const etcLabel = createLabel('선택 사유 작성 유무:');
+        // etcOptionsContainer.appendChild(etcLabel);
+        // etcOptionsContainer.classList.add('mb-3');
+        //
+        // // Create radio buttons for "Yes" and "No"
+        // const optionYes = createRadioOption(questionNumber, 'Yes', false);
+        // const optionNo = createRadioOption(questionNumber, 'No', true);
+        //
+        // etcOptionsContainer.appendChild(optionYes);
+        // etcOptionsContainer.appendChild(optionNo);
+        //
+        // suriForm.appendChild(etcOptionsContainer);
 
 
         // research-query-container 추가
         const container = document.getElementById('research-query-container');
         container.appendChild(suriForm);
 
+        // deleteQueryId에 suri_seq 추가
         if (suriForm.querySelector('input[name^="suri_seq_"]')) {
             let suri_seq = suriForm.querySelector('input[name^="suri_seq_"]').value
             deletedQueryId = deletedQueryId.filter(_suri_seq => _suri_seq !== suri_seq)
         }
     }
 
+    function createETCinput(questionNumber) {
+        const etcContainerHTML = `
+        <div class="mb-3 row align-items-center">
+            <label class="form-label col-auto">선택 사유 작성 유무:</label>
+            <div class="form-check col-auto">
+                <input class="form-check-input" type="radio" name="suri_etc_${questionNumber}" id="suri_etc_yes_${questionNumber}" value="Yes">
+                <label class="form-check-label" for="suri_etc_yes_${questionNumber}">예</label>
+            </div>
+            <div class="form-check col-auto">
+                <input class="form-check-input" type="radio" name="suri_etc_${questionNumber}" id="suri_etc_no_${questionNumber}" value="No" checked>
+                <label class="form-check-label" for="suri_etc_no_${questionNumber}">아니오</label>
+            </div>
+        </div>
+    `;
+
+        const parser = new DOMParser();
+        return parser.parseFromString(etcContainerHTML, 'text/html').body.firstChild;
+    }
 
     function createHiddenInput(name) {
         const input = document.createElement('input');
@@ -339,95 +354,45 @@
         input.type = 'text';
         input.classList.add('form-control');
         input.name = name;
-        // try {
-        //     if (rsDTO.suri.length > 0) {
-        //         const suri = rsDTO.suri[questionNumber - 1];
-        //         // suri title 과 suri option 의 초기값 설정
-        //         console.log(suri)
-        //         if (name === `suri_title_${questionNumber}`) {
-        //             input.value = suri.suri_title;
-        //         } else {
-        //             input.value = suri[`suri_que${name.match(/\d+/)[0]}_`];
-        //         }
-        //     }
-        // } catch (e) {
-        //     input.value = '';
-        // }
-
-
         return input;
     }
 
-    // Function to create a radio button for "Yes" or "No"
-    function createRadioOption(questionNumber, label, isSelected) {
-        const radioInput = document.createElement('input');
-        radioInput.type = 'radio';
-        radioInput.id = `suri_etc_${questionNumber}_${label.toLowerCase()}`;
-        radioInput.name = `suri_etc_${questionNumber}`;
-        radioInput.value = label.toLowerCase();
-
-        // checked 값은 rsDTO에서 가져오고 없다면 No로 설정
-        if (isSelected) {
-            radioInput.checked = true;
-        }
-        // try {
-        //     if (rsDTO.suri.length > 0) {
-        //         const suri = rsDTO.suri[questionNumber - 1];
-        //         if (suri.suri_etc === label.toLowerCase()) {
-        //             radioInput.checked = true;
-        //         }
-        //     } else {
-        //         if (label === 'No') {
-        //             radioInput.checked = true;
-        //         }
-        //     }
-        // } catch (e) {
-        //     if (isSelected) {
-        //         radioInput.checked = true;
-        //     }
-        // }
-
-
-        const radioLabel = document.createElement('label');
-        radioLabel.setAttribute('for', `suri_etc_${questionNumber}_${label.toLowerCase()}`);
-        radioLabel.textContent = label;
-
-        const radioContainer = document.createElement('div');
-        radioContainer.appendChild(radioInput);
-        radioContainer.appendChild(radioLabel);
-
-        return radioContainer;
-    }
-
     function createMultiInput(questionNumber) {
-        const questionMultiLabel = createLabel('Multi:');
-        const questionMultiInput = document.createElement('input');
-        questionMultiInput.type = 'number';
-        questionMultiInput.classList.add('form-control');
-        questionMultiInput.name = `suri_multi_${questionNumber}`;
-        questionMultiInput.min = "1";
-        questionMultiInput.max = "5";
-        questionMultiInput.value = "1";
+        const initialValue = rsDTO.suri[questionNumber - 1] ? rsDTO.suri[questionNumber - 1].suri_multi : 1;
+        const questionMultiLabel = '제출 가능한 선택지 개수 최대값:';
+        const multiContainerHTML = `
+        <div class="dropdown">
+        <span class="label-text">제출 가능한 선택지 개수 최대값:</span>
+            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton_${questionNumber}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span id="selectedValue_${questionNumber}">${initialValue}</span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton_${questionNumber}">
+                <div class="dropdown-item" data-value="1">1</div>
+                <div class="dropdown-item" data-value="2">2</div>
+                <div class="dropdown-item" data-value="3">3</div>
+                <div class="dropdown-item" data-value="4">4</div>
+                <div class="dropdown-item" data-value="5">5</div>
+            </div>
+            <input type="hidden" name="suri_multi_${questionNumber}" id="suri_multi_${questionNumber}" value="1">
+        </div>
+    `;
 
-        // Set the value based on data in rsDTO
-        // try {
-        //     if (rsDTO.suri.length > 0) {
-        //         const suri = rsDTO.suri[questionNumber - 1];
-        //         questionMultiInput.value = suri.suri_multi;
-        //     } else {
-        //         questionMultiInput.value = 1;
-        //     }
-        // } catch (e) {
-        //     questionMultiInput.value = 1;
-        // }
+        // HTML 문자열을 DOM 요소로 파싱하여 반환
+        const parser = new DOMParser();
+        const multiContainer = parser.parseFromString(multiContainerHTML, 'text/html').body.firstChild;
 
-        const multiContainer = document.createElement('div');
-        multiContainer.appendChild(questionMultiLabel);
-        multiContainer.appendChild(questionMultiInput);
+        // 드롭다운 선택 항목 클릭 시 이벤트 처리
+        const dropdownItems = multiContainer.querySelectorAll('.dropdown-item');
+        dropdownItems.forEach(item => {
+            item.addEventListener('click', function(event) {
+                const selectedValue = event.target.getAttribute('data-value');
+                document.getElementById(`selectedValue_${questionNumber}`).textContent = selectedValue;
+                document.getElementById(`suri_multi_${questionNumber}`).value = selectedValue;
+            });
+        });
 
         return multiContainer;
     }
-
 
     function addValidationAndLimit(input, maxLength) {
         const helpElement = document.createElement('small');
@@ -436,7 +401,7 @@
         // helpElement.classList.add('text-muted');
         // input 요소의 초기값을 이용하여 길이를 설정
         const initialLength = input.value.length;
-        helpElement.textContent = `${initialLength} / ${maxLength} characters`;
+        helpElement.textContent = `${initialLength} / ${maxLength} 자`;
 
         // 부모 요소가 존재할 때만 appendChild 호출
         if (input.parentNode) {
@@ -445,13 +410,13 @@
 
         input.addEventListener('input', function () {
             const inputLength = input.value.length;
-            helpElement.textContent = `${inputLength} / ${maxLength} characters`;
+            helpElement.textContent = `${inputLength} / ${maxLength} 자`;
             if (inputLength > maxLength) {
                 helpElement.classList.add('text-danger');
                 input.classList.add('is-invalid');
                 setTimeout(function () {
                     input.value = input.value.substring(0, maxLength);
-                    helpElement.textContent = `${maxLength} / ${maxLength} characters`;
+                    helpElement.textContent = `${maxLength} / ${maxLength} 자`;
                     helpElement.classList.remove('text-danger');
                     input.classList.remove('is-invalid');
                 }, 1000);
@@ -481,15 +446,15 @@
     function validateInput(input, maxLength) {
         const helpElement = document.getElementById(input.id + '-help');
         const inputLength = input.value.length;
-        helpElement.textContent = `${inputLength} / ${maxLength} characters`;
+        helpElement.textContent = `${inputLength} / ${maxLength} 자`;
         if (inputLength > maxLength) {
             helpElement.classList.add('text-danger');
             input.classList.add('is-invalid');
             // 1초 뒤에 maxLength 길이로 자르기
-            helpElement.textContent = `${inputLength} / ${maxLength} characters` + `  최대 ${maxLength}자까지 입력 가능합니다.`;
+            helpElement.textContent = `${inputLength} / ${maxLength} 자` + `  최대 ${maxLength}자까지 입력 가능합니다.`;
             setTimeout(() => {
                 input.value = input.value.substring(0, maxLength);
-                helpElement.textContent = `${maxLength} / ${maxLength} characters`;
+                helpElement.textContent = `${maxLength} / ${maxLength} 자`;
             }, 1000);
         } else {
             helpElement.classList.remove('text-danger');
@@ -506,12 +471,50 @@
         // 제목과 내용 유효성 검사
         const titleInput = document.getElementById('research-title-input');
         const contentInput = document.getElementById('research-content-input');
-        if (!validateTitleAndContent(titleInput, contentInput)) {
+        const suriForms = document.querySelectorAll('.suri-form');
+        if (!validateForms(titleInput, contentInput, suriForms)) {
             return; // 유효성 검사 실패 시 중단
         }
 
+
+        // rsDTO 객체를 JSON 형식으로 변환
+        const requestData = JSON.stringify(rsDTO);
+
+        // Axios 사용하여 POST 요청 전송
+        /* global axios */
+        axios.post('/research/edit', requestData, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
+            .then(function () {
+                // 성공적으로 서버에서 응답을 받은 경우
+                alert('데이터가 성공적으로 전송되었습니다.');
+                window.location.href = '/research/detail?sur_seq=' + rsDTO.sur_seq;
+            })
+            .catch(function (error) {
+                // 오류 발생 시 처리
+                console.error('데이터 전송 중 오류가 발생했습니다.', error);
+                alert('데이터 전송 중 오류가 발생했습니다.')
+            });
+    }
+
+    function validateForms(titleInput, contentInput, suriForms) {
+        // 제목 유효성 검사
+        if (!titleInput.value.trim()) {
+            alert('제목을 입력해주세요.');
+            titleInput.focus();
+            return false; // 유효성 검사 실패
+        }
+
+        // 내용 유효성 검사
+        if (!contentInput.value.trim()) {
+            alert('내용을 입력해주세요.');
+            contentInput.focus();
+            return false; // 유효성 검사 실패
+        }
+
         // Suri 관련 유효성 검사
-        const suriForms = document.querySelectorAll('.suri-form');
         for (let i = 0; i < suriForms.length; i++) {
             const suriForm = suriForms[i];
             const suriTitleInput = suriForm.querySelector(`input[name^="suri_title_"]`);
@@ -549,51 +552,13 @@
 
                 // 현재 옵션 입력 필드에 값이 있는데 이전 옵션 입력 필드에 값이 비어있는 경우
                 if (currentOption && !previousOption) {
-                    alert(`질문의 선택지 ${optionNumber - 1}은(는) 빈칸이 될 수 없습니다.`);
+                    alert(`질문의 선택지 ${optionNumber - 1}번은(는) 빈칸이 될 수 없습니다.`);
                     suriOptions[j - 1].focus();
                     window.scrollTo(0, suriOptions[j - 1].offsetTop);
                     return; // 유효성 검사 실패 시 중단
                 }
                 previousOption = currentOption;
             }
-        }
-
-
-        // rsDTO 객체를 JSON 형식으로 변환
-        const requestData = JSON.stringify(rsDTO);
-
-        // Axios 사용하여 POST 요청 전송
-        /* global axios */
-        axios.post('/research/edit', requestData, {
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        })
-            .then(function () {
-                // 성공적으로 서버에서 응답을 받은 경우
-                alert('데이터가 성공적으로 전송되었습니다.');
-                window.location.href = '/research/detail?sur_seq=' + rsDTO.sur_seq;
-            })
-            .catch(function (error) {
-                // 오류 발생 시 처리
-                console.error('데이터 전송 중 오류가 발생했습니다.', error);
-                alert('데이터 전송 중 오류가 발생했습니다.')
-            });
-    }
-
-    function validateTitleAndContent(titleInput, contentInput) {
-        // 제목 유효성 검사
-        if (!titleInput.value.trim()) {
-            alert('제목을 입력해주세요.');
-            titleInput.focus();
-            return false; // 유효성 검사 실패
-        }
-
-        // 내용 유효성 검사
-        if (!contentInput.value.trim()) {
-            alert('내용을 입력해주세요.');
-            contentInput.focus();
-            return false; // 유효성 검사 실패
         }
 
         // 다른 필요한 유효성 검사 규칙을 여기에 추가
