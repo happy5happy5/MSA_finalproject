@@ -60,18 +60,20 @@
     console.log(rsDTO);
     console.log(rsaDTO);
 </script>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
 <script>
     // todo: 일단 이렇게 하고 나중에 수정 하자
-
+    // let chartData = [
+    //     ['Task', 'Hours per Day'],
+    //     ['Work', 11],
+    //     ['Eat', 2],
+    //     ['Sleep', 7],
+    //     ['Other', 4]
+    // ];
     let result = {}
-
     rsaDTO.forEach(function (rsa) {
-        // console.log("question number::",rsa.sura_no)
-        // console.log("option number::",rsa.sura_item)
         let answer = rsa.sura_item.split("")
-        // console.log("answer::",answer)
-        // if (result[rsa.sura_no] === undefined) then make it!!!!!!
-        // console.log(result[rsa.sura_no]);
         if (result[rsa.sura_no] === undefined) {
             result[rsa.sura_no] = {}
         }
@@ -87,11 +89,77 @@
             result[rsa.sura_no]['total'] += 1
         }
 
+        console.log("question number::",rsa.sura_no)
+        console.log("option number::",rsa.sura_item)
+        console.log("reason::",rsa.sura_reason)
     });
-    console.log(result)
+    // console.log(result)
 
 </script>
-<script>
+<script type="text/javascript">
+
+    google.charts.load('current', {'packages':['corechart']});
+    google.charts.setOnLoadCallback(drawChart);
+    // 재사용 가능한 함수로 차트 그리기
+    function drawChart(data, id) {
+
+        let chartData = google.visualization.arrayToDataTable(data);
+
+        let chartOptions = {}; // 기본 옵션 또는 사용자 지정 옵션
+
+        let chart = new google.visualization.PieChart(document.getElementById(id));
+        chart.draw(chartData, chartOptions);
+    }
+</script>
+<script type="text/javascript">
+    function createModalForReasonBtn(container, no, op){
+        //     선택 사유 보여줄 모달 창 만들기
+        const modal = document.createElement("div");
+        modal.classList.add("modal", "fade");
+        modal.id = `option${op}Modal${no}`;
+        modal.setAttribute("tabindex", "-1");
+        modal.setAttribute("aria-labelledby", `option${op}ModalLabel`);
+        modal.setAttribute("aria-hidden", "true");
+
+        const modalDialog = document.createElement("div");
+        modalDialog.classList.add("modal-dialog");
+
+        const modalContent = document.createElement("div");
+        modalContent.classList.add("modal-content");
+
+        const modalHeader = document.createElement("div");
+        modalHeader.classList.add("modal-header");
+
+        const modalTitle = document.createElement("h5");
+        modalTitle.classList.add("modal-title");
+        modalTitle.id = `option${op}no${no}ModalLabel`;
+        modalTitle.textContent = `질문번호 ${no} 선택지 ${op}의 사유`;
+
+        const modalCloseButton = document.createElement("button");
+        modalCloseButton.classList.add("btn-close");
+        modalCloseButton.setAttribute("type", "button");
+        modalCloseButton.setAttribute("data-bs-dismiss", "modal");
+        modalCloseButton.setAttribute("aria-label", "Close");
+
+        const modalBody = document.createElement("div");
+        modalBody.classList.add(`modal-body_op${op}_no${no}`);
+
+        modalHeader.appendChild(modalTitle);
+        modalHeader.appendChild(modalCloseButton);
+        modalContent.appendChild(modalHeader);
+        modalContent.appendChild(modalBody);
+        modalDialog.appendChild(modalContent);
+        modal.appendChild(modalDialog);
+        container.appendChild(modal);
+
+        const optionButton = document.createElement("button");
+        optionButton.classList.add("btn", "btn-primary");
+        optionButton.setAttribute("type", "button");
+        optionButton.setAttribute("data-bs-toggle", "modal");
+        optionButton.setAttribute("data-bs-target", `#option${op}Modal${no}`);
+        optionButton.textContent = "선택 사유";
+        container.appendChild(optionButton);
+    }
     function createQuestionElement(question) {
         const questionContainer = document.createElement("div");
         questionContainer.classList.add("suri-form", "mb-3", "border", "border-primary", "p-5");
@@ -111,82 +179,56 @@
 
         // Loop through and create input elements for the question options
         for (let op = 1; (op <= 5) && !(question[`suri_que${op}`] === ''); op++) {
-            console.log(op, question.suri_no)
-            //     선택 사유 보여줄 모달 창 만들기
-            const modal = document.createElement("div");
-            modal.classList.add("modal", "fade");
-            modal.id = `option${op}Modal${question.suri_no}`;
-            modal.setAttribute("tabindex", "-1");
-            modal.setAttribute("aria-labelledby", `option${op}ModalLabel`);
-            modal.setAttribute("aria-hidden", "true");
-
-            const modalDialog = document.createElement("div");
-            modalDialog.classList.add("modal-dialog");
-
-            const modalContent = document.createElement("div");
-            modalContent.classList.add("modal-content");
-
-            const modalHeader = document.createElement("div");
-            modalHeader.classList.add("modal-header");
-
-            const modalTitle = document.createElement("h5");
-            modalTitle.classList.add("modal-title");
-            modalTitle.id = `option${op}no${question.suri_no}ModalLabel`;
-            modalTitle.textContent = `질문번호 ${question.suri_no} 선택지 ${op}의 사유`;
-
-            const modalCloseButton = document.createElement("button");
-            modalCloseButton.classList.add("btn-close");
-            modalCloseButton.setAttribute("type", "button");
-            modalCloseButton.setAttribute("data-bs-dismiss", "modal");
-            modalCloseButton.setAttribute("aria-label", "Close");
-
-            const modalBody = document.createElement("div");
-            modalBody.classList.add(`modal-body_op${op}_no${question.suri_no}`);
-
-
-            modalHeader.appendChild(modalTitle);
-            modalHeader.appendChild(modalCloseButton);
-            modalContent.appendChild(modalHeader);
-            modalContent.appendChild(modalBody);
-            modalDialog.appendChild(modalContent);
-            modal.appendChild(modalDialog);
-            questionContainer.appendChild(modal);
-
-            const optionButton = document.createElement("button");
-            optionButton.classList.add("btn", "btn-primary");
-            optionButton.setAttribute("type", "button");
-            optionButton.setAttribute("data-bs-toggle", "modal");
-            optionButton.setAttribute("data-bs-target", `#option${op}Modal${question.suri_no}`);
-            optionButton.textContent = "선택 사유";
-            questionContainer.appendChild(optionButton);
-
+            const optionContainer = document.createElement("div");
+            optionContainer.classList.add("option-container", "d-flex", "align-items-center");
 
             const optionLabel = document.createElement("label");
-            optionLabel.classList.add("form-label");
+            // 줄바꿈 없애기
+            optionLabel.style.whiteSpace = "nowrap";
+            optionLabel.classList.add("form-label", "d-inline-block");
             optionLabel.textContent = `선택지 ${op}:`;
-            questionContainer.appendChild(optionLabel);
-
-            const resultDiv = document.createElement("div");
-            if (result[question.suri_no] === undefined || (isNaN(Math.round(result[question.suri_no][`${op}`] / result[question.suri_no]['total'] * 100)))) {
-                resultDiv.textContent = `Result: 0% Total: ${result[question.suri_no]['total']}`;
-                // console.log("no total value in result cause NaN")
-            } else {
-                resultDiv.textContent = `Result: ${Math.round(result[question.suri_no][`${op}`] / result[question.suri_no]['total'] * 100)}% Total: ${result[question.suri_no]['total']}`;
-            }
-            questionContainer.appendChild(resultDiv);
+            optionContainer.appendChild(optionLabel);
 
             const optionInput = document.createElement("input");
             optionInput.type = "text";
-            optionInput.classList.add("form-control");
-            optionInput.classList.add("ms-3");
+            optionInput.classList.add("form-control", "ms-3");
             optionInput.disabled = true;
 
             if (`suri_que${op}` in question) {
                 optionInput.value = question[`suri_que${op}`];
-                questionContainer.appendChild(optionInput);
+                optionContainer.appendChild(optionInput);
             }
 
+
+
+
+            const resultDiv = document.createElement("div");
+            resultDiv.style.whiteSpace = "nowrap";
+            resultDiv.classList.add("mx-3");
+
+            if (result[question.suri_no] === undefined || (isNaN(Math.round(result[question.suri_no][`${op}`] / result[question.suri_no]['total'] * 100)))) {
+                // resultDiv.textContent = `비율: 0% 총선택: ${result[question.suri_no]['total']}`;
+                resultDiv.textContent = `비율: 0%`;
+                // console.log("no total value in result cause NaN")
+            } else {
+                resultDiv.textContent = `비율: ${Math.round(result[question.suri_no][`${op}`] / result[question.suri_no]['total'] * 100)}%`;
+            }
+            optionContainer.appendChild(resultDiv);
+
+            // 모달과 버튼 만들기
+            createModalForReasonBtn(optionContainer, question.suri_no, op)
+            questionContainer.appendChild(optionContainer);
+            //     spacer 만들기
+            const spacer = document.createElement("div");
+            spacer.classList.add("mb-3");
+            questionContainer.appendChild(spacer);
+
         }
+        const chartContainer = document.createElement("div");
+        chartContainer.classList.add("chart","col");
+        chartContainer.id = `chart${question.suri_no}`;
+        questionContainer.appendChild(chartContainer);
+
         return questionContainer;
     }
 
@@ -216,15 +258,34 @@
             for (let i = 0; i < rsaDTO.length; i++) {
                 let rsa = rsaDTO[i];
                 if (rsa.sura_no.toString() === no && rsa.sura_item === op && rsa.sura_reason !== "") {
-                    console.log({op}, {no}, {rsa});
-                    modal.textContent += rsa.sura_reason + "\n";
+                    // console.log({op}, {no}, {rsa});
+                    modal.innerHTML += rsa.sura_reason + "<br>";
                 }
             }
-
-        })
-
+        });
+        makeResultChart();
     });
 
+    function makeResultChart() {
+        //     차트 만들기
+        for (let i = 0; i < rsDTO.suri.length; i++) {
+            const question = rsDTO.suri[i];
+            // console.log("question::",question)
+            // console.log("result::",result[question.suri_no])
+            //     차트 데이터 만들기
+            let chartData = [
+                ['Question', 'Rate'],
+            ];
+            for (let op = 1; (op <= 5) && !(question[`suri_que${op}`] === ''); op++) {
+                if (result[question.suri_no] === undefined || (isNaN(Math.round(result[question.suri_no][`${op}`] / result[question.suri_no]['total'] * 100)))) {
+                    chartData.push([`${op}번 문항`, 0]);
+                } else {
+                    chartData.push([`${op}번 문항`, Math.round(result[question.suri_no][`${op}`])])
+                }
+            }
+            drawChart(chartData, `chart${question.suri_no}`);
+        }
+    }
 </script>
 
 
