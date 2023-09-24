@@ -1,6 +1,6 @@
 function createETCinput(questionNumber) {
     const etcContainerHTML = `
-        <div class="mb-3 row align-items-center">
+        <div class="mb-3 row align-items-center invisible">
             <label class="form-label col-auto">선택 사유 작성 유무:</label>
             <div class="form-check col-auto">
                 <input class="form-check-input" type="radio" name="suri_etc_${questionNumber}" id="suri_etc_yes_${questionNumber}" value="Yes">
@@ -16,20 +16,17 @@ function createETCinput(questionNumber) {
     const parser = new DOMParser();
     return parser.parseFromString(etcContainerHTML, 'text/html').body.firstChild;
 }
-
 function createHiddenInput(name) {
     const input = document.createElement('input');
     input.type = 'hidden';
     input.name = name;
     return input;
 }
-
 function createLabel(text) {
     const label = document.createElement('label');
     label.textContent = text;
     return label;
 }
-
 function createTextInput(name) {
     const input = document.createElement('input');
     input.type = 'text';
@@ -37,44 +34,43 @@ function createTextInput(name) {
     input.name = name;
     return input;
 }
-
 function createMultiInput(questionNumber) {
     let initialValue = 1;
-    if(rsDTO.suri)initialValue = rsDTO.suri[questionNumber - 1] ? rsDTO.suri[questionNumber - 1].suri_multi : 1;
-    const questionMultiLabel = '제출 가능한 선택지 개수 최대값:';
-    const multiContainerHTML = `
-        <div class="dropdown">
-        <span class="label-text">제출 가능한 선택지 개수 최대값:</span>
-            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton_${questionNumber}" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span id="selectedValue_${questionNumber}">${initialValue}</span>
-            </button>
-            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton_${questionNumber}">
-                <div class="dropdown-item" data-value="1">1</div>
-                <div class="dropdown-item" data-value="2">2</div>
-                <div class="dropdown-item" data-value="3">3</div>
-                <div class="dropdown-item" data-value="4">4</div>
-                <div class="dropdown-item" data-value="5">5</div>
+    if (rsDTO.suri) initialValue = rsDTO.suri[questionNumber - 1] ? rsDTO.suri[questionNumber - 1].suri_multi : 1;
+
+    // 입력 필드 문자열 생성
+    const inputFieldHTML = `
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">복수선택</span>
             </div>
-            <input type="hidden" name="suri_multi_${questionNumber}" id="suri_multi_${questionNumber}" value="1">
+            <input type="number" class="form-control" id="suri_multi_${questionNumber}" name="suri_multi_${questionNumber}"
+                   value="${initialValue}" min="1" max="5">
         </div>
     `;
 
-    // HTML 문자열을 DOM 요소로 파싱하여 반환
+    // DOMParser 사용하여 문자열을 DOM 요소로 변환
     const parser = new DOMParser();
-    const multiContainer = parser.parseFromString(multiContainerHTML, 'text/html').body.firstChild;
+    const inputField = parser.parseFromString(inputFieldHTML, 'text/html').body.firstChild;
 
-    // 드롭다운 선택 항목 클릭 시 이벤트 처리
-    const dropdownItems = multiContainer.querySelectorAll('.dropdown-item');
-    dropdownItems.forEach(item => {
-        item.addEventListener('click', function(event) {
-            const selectedValue = event.target.getAttribute('data-value');
-            document.getElementById(`selectedValue_${questionNumber}`).textContent = selectedValue;
-            document.getElementById(`suri_multi_${questionNumber}`).value = selectedValue;
-        });
+    // 입력 필드 변경 이벤트 처리
+    inputField.addEventListener('input', function () {
+        const enteredValue = parseInt(inputField.value);
+        if (isNaN(enteredValue)) {
+            // 입력값이 숫자가 아니면 초기값으로 설정
+            inputField.value = `${initialValue}`;
+        } else if (enteredValue < 1) {
+            // 입력값이 1보다 작으면 1로 설정
+            inputField.value = '1';
+        } else if (enteredValue > 5) {
+            // 입력값이 5보다 크면 5로 설정
+            inputField.value = '5';
+        }
     });
 
-    return multiContainer;
+    return inputField;
 }
+
 
 function addValidationAndLimit(input, maxLength) {
     const helpElement = document.createElement('small');

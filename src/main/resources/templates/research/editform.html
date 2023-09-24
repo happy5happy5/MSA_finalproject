@@ -22,10 +22,15 @@
 </script>
 <script>
     // 페이지 로드 시 초기 데이터를 rsDTO에서 가져와서 suri 폼을 생성합니다.
-
+    function adjustTextareaHeight(event) {
+        event.style.height = "auto";
+        event.style.height = (event.scrollHeight) + "px";
+        event.style.resize = "none";
+    }
     window.addEventListener('load', function () {
         loadRS();
         cntSuriForm();
+        adjustTextareaHeight(document.getElementById('research-content-input'));
     });
 
     // rsDTO를 이용하여 초기 suri 폼을 생성하는 함수

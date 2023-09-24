@@ -66,6 +66,14 @@ function validateForms(titleInput, contentInput, suriForms) {
                 return; // 유효성 검사 실패 시 중단
             }
 
+            // 두번째 옵션 입력 필드에 값이 없을 때
+            if (optionNumber === 2 && !currentOption) {
+                alert('질문의 선택지 2는 빈칸이 될 수 없습니다.');
+                optionInput.focus();
+                window.scrollTo(0, optionInput.offsetTop);
+                return; // 유효성 검사 실패 시 중단
+            }
+
 
             // 현재 옵션 입력 필드에 값이 있는데 이전 옵션 입력 필드에 값이 비어있는 경우
             if (currentOption && !previousOption) {

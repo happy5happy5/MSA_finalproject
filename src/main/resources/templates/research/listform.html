@@ -85,9 +85,18 @@
             sessionStorage.setItem("back", window.location.href);
         }
 
+
+        function adjustTextareaHeight(event) {
+            event.style.height = "auto";
+            event.style.height = (event.scrollHeight) + "px";
+            event.style.resize = "none";
+        }
+
+
         window.document.addEventListener("DOMContentLoaded", () => {
             let period = document.getElementsByClassName('period');
             let title = document.getElementsByClassName('title');
+            adjustTextareaHeight(document.getElementById("research-content-input"));
             for (let i = 0; i < period.length; i++) {
 
                 //     제목 글자 수 제한
@@ -100,8 +109,6 @@
                 let date = period[i].textContent.split('~');
                 let startDate = new Date(date[0]);
                 let endDate = new Date(date[1]);
-                startDate.setHours(startDate.getHours() + 9);
-                endDate.setHours(endDate.getHours() + 9);
                 period[i].textContent = startDate.toLocaleDateString() + ' - ' + endDate.toLocaleDateString();
 
                 // 날짜 비교
@@ -111,7 +118,6 @@
                 let useable = rssDTO["rsdto"][i]["useable"];
                 let editable = rssDTO["rsdto"][i]["editable"];
 
-                let now = new Date();
                 if (useable === "N" && editable === "Y") {
                     title[i].innerHTML = '<span class="badge bg-primary">진행 예정</span> ' + title[i].innerHTML;
                 } else if (useable === "N" && editable === "N") {
@@ -122,7 +128,6 @@
                 }
             }
         })
-
     </script>
 </section>
 <nav aria-label="Page navigation">
