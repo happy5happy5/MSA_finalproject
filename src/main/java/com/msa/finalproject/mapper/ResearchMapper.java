@@ -37,8 +37,8 @@ public interface ResearchMapper {
     );
 
 
-    @Insert("INSERT INTO rs (sur_title, sur_desc, que_cnt, sur_sat_date, sur_end_date, reg_name, reg_date, use_yn, udt_name, udt_date) " +
-            "VALUES (#{sur_title}, #{sur_desc}, #{que_cnt}, #{sur_sat_date}, #{sur_end_date}, #{reg_name}, #{reg_date}, #{use_yn}, #{udt_name}, #{udt_date})")
+    @Insert("INSERT INTO rs (sur_title, sur_desc, que_cnt, sur_sat_date, sur_end_date, reg_name, reg_date, udt_name, udt_date) " +
+            "VALUES (#{sur_title}, #{sur_desc}, #{que_cnt}, #{sur_sat_date}, #{sur_end_date}, #{reg_name}, #{reg_date}, #{udt_name}, #{udt_date})")
     @Options(useGeneratedKeys = true, keyProperty = "sur_seq")
     void createRS(RSDTO rsDTO);
 
@@ -53,7 +53,7 @@ public interface ResearchMapper {
     @Select("SELECT * FROM rsi WHERE sur_seq = #{sur_seq}")
     List<RSI> getRSI(int surSeq);
 
-    @Update("UPDATE rs SET sur_title = #{sur_title}, sur_desc = #{sur_desc}, que_cnt = #{que_cnt}, sur_sat_date = #{sur_sat_date}, sur_end_date = #{sur_end_date}, reg_name = #{reg_name}, reg_date = #{reg_date}, use_yn = #{use_yn}, udt_name = #{udt_name}, udt_date = #{udt_date} WHERE sur_seq = #{sur_seq}")
+    @Update("UPDATE rs SET sur_title = #{sur_title}, sur_desc = #{sur_desc}, que_cnt = #{que_cnt}, sur_sat_date = #{sur_sat_date}, sur_end_date = #{sur_end_date}, reg_name = #{reg_name}, reg_date = #{reg_date}, udt_name = #{udt_name}, udt_date = #{udt_date} WHERE sur_seq = #{sur_seq}")
     void editRS(RSDTO rsDTO);
 
     @Update("UPDATE rsi SET suri_no = #{suri_no}, suri_title = #{suri_title}, suri_que1 = #{suri_que1}, suri_que2 = #{suri_que2}, suri_que3 = #{suri_que3}, suri_que4 = #{suri_que4}, suri_que5 = #{suri_que5}, suri_type = #{suri_type}, suri_multi = #{suri_multi}, suri_etc = #{suri_etc}, reg_name = #{reg_name}, reg_date = #{reg_date}, udt_name = #{udt_name}, udt_date = #{udt_date} WHERE suri_seq = #{suri_seq}")
