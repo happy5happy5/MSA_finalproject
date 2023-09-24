@@ -2,5 +2,19 @@
     top: 0;
     z-index: 100;
     position: fixed;
-    width: 100%;
+    /*width: 100%;*/
+}
+
+#sidebar {
+    right: 10px;
+    position: fixed;
+    transition: transform 1s ease; /* transform 속성에 대한 1초 동안의 부드러운 애니메이션 */
+}
+
+.sidebar-fixed {
+    top: 30%;
+    z-index: 100;
+    width: 30px;
+    /*overflow-y: auto;*/
+    background: #343a40;
 }

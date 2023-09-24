@@ -233,5 +233,6 @@ function deleteSuriForm() {
 
 function cntSuriForm() {
     let cnt = document.querySelector('#research-query-container').childElementCount;
-    document.querySelector('#num-of-questions').textContent = `총 문항 수: ${cnt}`;
+    document.querySelector('#num-of-questions').textContent = '총 문항 수: ' + cnt + '개';
+    document.querySelector('#num-of-questions-sidebar').textContent = '총 문항 : ' + cnt + '개';
 }

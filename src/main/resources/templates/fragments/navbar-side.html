@@ -1,42 +1,35 @@
-<!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="/webjars/bootstrap/5.1.3/css/bootstrap.min.css">
-</head>
-<body>
-
 <div th:fragment="nav_bar-side(activeItem)">
-    <div class="container-fluid">
+    <div class="container">
         <div class="row">
-            <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-dark sidebar">
+            <nav id="sidebar" class="col-lg-1 col-1 px-1 py-3 bg-dark sidebar sidebar-fixed">
                 <div class="position-sticky">
                     <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link active" href="#">
-                                메뉴 항목 1
-                            </a>
+                        <li class="nav-item mb-3">
+                            <!--            총 문항 수-->
+                            <span id="num-of-questions-sidebar" class="text-white"></span>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                메뉴 항목 2
-                            </a>
+                        <li class="nav-item mb-3">
+                            <button type="button" class="btn-info" id="add-question-button"
+                                    onclick="addSuriForm(document.querySelector('#research-query-container').childElementCount + 1)">
+                                질문 추가
+                            </button>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="#">
-                                메뉴 항목 3
-                            </a>
+                        <li class="nav-item mb-3">
+                            <button type="button" class="btn-danger" id="remove-question-button" onclick="deleteSuriForm()">
+                                질문 삭제
+                            </button>
+                        </li>
+                        <li class="nav-item mb-3">
+                            <button type="button" class="btn-secondary" id="submit-button"
+                                    onclick="submitResearchDTO(activeItem)">
+                                제출
+                            </button>
                         </li>
                     </ul>
                 </div>
             </nav>
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div th:id="${activeItem}" th:value="${activeItem}"></div>
-            </main>
         </div>
     </div>
     <script src="/webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+
 </div>
-</body>
-</html>
