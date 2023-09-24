@@ -217,23 +217,40 @@
 </script>
 <script>
     function submitSurvey() {
-//     rsDTO.suri 의 갯수만큼 반복문을 돌려서
-//     rsaDTO 라는 배열에 객체를 만들어서 넣어준다.
-//     객체의 속성은 sur_seq, suri_seq, sura_no, sura_item, sura_reason,sura_name, sura_date 이다.
-//     이때 sura_item 사용자가 선택한 답변의 값이 들어가야한다.
-//     답변은 만약 2를 선택했다면 그냥 2를 넣어주고
-//     2,3,4를 선택했다면 234를 넣어준다.
-//     sura_reason 사용자가 입력한 이유가 들어가야한다.
-//     sura_name 사용자의 이름이 들어가야한다.
-//     sura_date는 현재 날짜가 들어가야한다.
-
-// 초기화된 rsaDTO 배열
+        // 초기화된 rsaDTO 배열
         let rsaDTO = [];
 
         // 현재 날짜를 생성
         const currentDate = new Date();
         const formattedDate = `${currentDate.getFullYear()}-${currentDate.getMonth() + 1}-${currentDate.getDate()}`;
 
+        // 유효성 검사(문항 하나 안에서 답변 하지 않은 문항이 있을 때 제출 불가능 하도록 변경)
+        const questionElements = document.querySelectorAll(".suri-form");
+        // form-check-input 클래스를 가진 input 태그를 반복하며 checked 된 input 태그가 있는지 확인
+        let isAnswered = true;
+        // 포커스 대상 저장
+        let focusTarget = null;
+        questionElements.forEach(questionElement => {
+            const optionInputs = questionElement.querySelectorAll(".form-check-input");
+            let isChecked = false;
+            optionInputs.forEach(optionInput => {
+                if (optionInput.checked) {
+                    isChecked = true;
+                }
+            });
+            if (!isChecked) {
+                isAnswered = false;
+                if (!focusTarget) {
+                    focusTarget = questionElement;
+                }
+            }
+        });
+        if (!isAnswered) {
+            // 포커스 이동
+            focusTarget.scrollIntoView();
+            alert("답변하지 않은 문항이 있습니다.");
+            return;
+        }
         // rsDTO.suri를 반복하며 RSA 객체를 생성하여 rsaDTO 배열에 추가
         rsDTO.suri.forEach(question => {
             // 사용자가 선택한 답변의 값 (sura_item)

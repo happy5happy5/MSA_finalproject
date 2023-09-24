@@ -110,21 +110,68 @@
         questionContainer.appendChild(titleInput);
 
         // Loop through and create input elements for the question options
-        for (let i = 1; i <= 5; i++) {
-            if (question[`suri_que${i}`] === '') {
-                break
-            }
+        for (let op = 1; (op <= 5) && !(question[`suri_que${op}`] === ''); op++) {
+            console.log(op, question.suri_no)
+            //     선택 사유 보여줄 모달 창 만들기
+            const modal = document.createElement("div");
+            modal.classList.add("modal", "fade");
+            modal.id = `option${op}Modal${question.suri_no}`;
+            modal.setAttribute("tabindex", "-1");
+            modal.setAttribute("aria-labelledby", `option${op}ModalLabel`);
+            modal.setAttribute("aria-hidden", "true");
+
+            const modalDialog = document.createElement("div");
+            modalDialog.classList.add("modal-dialog");
+
+            const modalContent = document.createElement("div");
+            modalContent.classList.add("modal-content");
+
+            const modalHeader = document.createElement("div");
+            modalHeader.classList.add("modal-header");
+
+            const modalTitle = document.createElement("h5");
+            modalTitle.classList.add("modal-title");
+            modalTitle.id = `option${op}no${question.suri_no}ModalLabel`;
+            modalTitle.textContent = `질문번호 ${question.suri_no} 선택지 ${op}의 사유`;
+
+            const modalCloseButton = document.createElement("button");
+            modalCloseButton.classList.add("btn-close");
+            modalCloseButton.setAttribute("type", "button");
+            modalCloseButton.setAttribute("data-bs-dismiss", "modal");
+            modalCloseButton.setAttribute("aria-label", "Close");
+
+            const modalBody = document.createElement("div");
+            modalBody.classList.add(`modal-body_op${op}_no${question.suri_no}`);
+
+
+            modalHeader.appendChild(modalTitle);
+            modalHeader.appendChild(modalCloseButton);
+            modalContent.appendChild(modalHeader);
+            modalContent.appendChild(modalBody);
+            modalDialog.appendChild(modalContent);
+            modal.appendChild(modalDialog);
+            questionContainer.appendChild(modal);
+
+            const optionButton = document.createElement("button");
+            optionButton.classList.add("btn", "btn-primary");
+            optionButton.setAttribute("type", "button");
+            optionButton.setAttribute("data-bs-toggle", "modal");
+            optionButton.setAttribute("data-bs-target", `#option${op}Modal${question.suri_no}`);
+            optionButton.textContent = "선택 사유";
+            questionContainer.appendChild(optionButton);
+
+
             const optionLabel = document.createElement("label");
             optionLabel.classList.add("form-label");
-            optionLabel.textContent = `선택지 ${i}:`;
+            optionLabel.textContent = `선택지 ${op}:`;
             questionContainer.appendChild(optionLabel);
 
             const resultDiv = document.createElement("div");
-            if (result[question.suri_no] === undefined || (isNaN(Math.round(result[question.suri_no][`${i}`] / result[question.suri_no]['total'] * 100)))) {
+            if (result[question.suri_no] === undefined || (isNaN(Math.round(result[question.suri_no][`${op}`] / result[question.suri_no]['total'] * 100)))) {
                 resultDiv.textContent = `Result: 0% Total: ${result[question.suri_no]['total']}`;
-                console.log("no total value in result cause NaN")
+                // console.log("no total value in result cause NaN")
             } else {
-                resultDiv.textContent = `Result: ${Math.round(result[question.suri_no][`${i}`] / result[question.suri_no]['total'] * 100)}% Total: ${result[question.suri_no]['total']}`;
+                resultDiv.textContent = `Result: ${Math.round(result[question.suri_no][`${op}`] / result[question.suri_no]['total'] * 100)}% Total: ${result[question.suri_no]['total']}`;
             }
             questionContainer.appendChild(resultDiv);
 
@@ -134,13 +181,12 @@
             optionInput.classList.add("ms-3");
             optionInput.disabled = true;
 
-            if (`suri_que${i}` in question) {
-                optionInput.value = question[`suri_que${i}`];
+            if (`suri_que${op}` in question) {
+                optionInput.value = question[`suri_que${op}`];
                 questionContainer.appendChild(optionInput);
             }
 
         }
-
         return questionContainer;
     }
 
@@ -155,7 +201,29 @@
     }
 
     // Call the function to populate questions when the page loads
-    window.addEventListener("load", populateQuestions);
+    window.addEventListener("load", () => {
+        populateQuestions();
+        //     modal-body_op 로 시작하는 모든 클레스 검색
+        const modalBody = document.querySelectorAll('[class^="modal-body_op"]');
+        modalBody.forEach(function (modal) {
+            // console.log(modal.classList[0]);
+            // modal-body_op2_no1
+            let op = modal.classList[0].split("_")[1].slice(2);
+            let no = modal.classList[0].split("_")[2].slice(2);
+            // console.log(op);
+            // console.log(no);
+
+            for (let i = 0; i < rsaDTO.length; i++) {
+                let rsa = rsaDTO[i];
+                if (rsa.sura_no.toString() === no && rsa.sura_item === op && rsa.sura_reason !== "") {
+                    console.log({op}, {no}, {rsa});
+                    modal.textContent += rsa.sura_reason + "\n";
+                }
+            }
+
+        })
+
+    });
 
 </script>
 
