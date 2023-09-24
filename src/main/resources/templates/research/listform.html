@@ -100,10 +100,15 @@
                 <td class="period" th:text="${rss.sur_sat_date + '~' + rss.sur_end_date}"></td>
                 <td th:text="${rss.getHits()}"></td>
                 <!--                useable === "Y" && editable === "N"-->
-                <td th:classappend="${(rss.useable == 'Y' &&rss.editable=='N')  ? '' : 'invisible'}">
+                <td th:classappend="${(rss.useable == 'Y' &&rss.editable=='N')  ? '' : 'd-none'}">
                     <a class="btn btn-primary" th:id="${rss.sur_seq}"
                        th:href="@{${'/research/start'}(sur_seq=${rss.sur_seq})}"
                        onclick="saveBack()">설문참여</a>
+                </td>
+                <td th:classappend="${(rss.useable == 'N' &&rss.editable=='N')  ? '' : 'd-none'}">
+                    <a class="btn btn-primary" th:id="${rss.sur_seq}"
+                       th:href="@{${'/research/result'}(sur_seq=${rss.sur_seq})}"
+                       onclick="saveBack()">결과보기</a>
                 </td>
             </tr>
             </tbody>
