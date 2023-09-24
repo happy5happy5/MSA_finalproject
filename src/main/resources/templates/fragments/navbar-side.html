@@ -1,26 +1,31 @@
 <div th:fragment="nav_bar-side(activeItem)">
     <div class="container">
         <div class="row">
-            <nav id="sidebar" class="col-lg-1 col-1 px-1 py-3 bg-dark sidebar sidebar-fixed">
+            <nav id="sidebar" class="col-lg-1 col-1 px-1 py-3 bg-dark sidebar sidebar-fixed d-flex justify-content-center">
                 <div class="position-sticky">
-                    <ul class="nav flex-column">
+                    <ul class="nav flex-column px-0 mx-0">
                         <li class="nav-item mb-3">
                             <!--            총 문항 수-->
                             <span id="num-of-questions-sidebar" class="text-white"></span>
                         </li>
-                        <li class="nav-item mb-3">
-                            <button type="button" class="btn-info" id="add-question-button"
+                        <li class="nav-item mb-3 d-flex justify-content-center">
+                            <button type="button" class="btn btn-info" id="add-question-button"
                                     onclick="addSuriForm(document.querySelector('#research-query-container').childElementCount + 1)">
                                 질문 추가
                             </button>
                         </li>
                         <li class="nav-item mb-3">
-                            <button type="button" class="btn-danger" id="remove-question-button" onclick="deleteSuriForm()">
+                            <button type="button" class="btn btn-danger" id="remove-question-button" onclick="deleteSuriForm()">
                                 질문 삭제
                             </button>
                         </li>
-                        <li class="nav-item mb-3">
-                            <button type="button" class="btn-secondary" id="submit-button"
+                        <li th:classappend="${activeItem == '/research/create' ? 'nav-item mb-3' : 'invisible nav-item mb-3'}">
+                            <button type="button" class="btn btn-primary" id="save-button" onclick="updateResearchDTO()">
+                                임시저장
+                            </button>
+                        </li>
+                        <li class="nav-item mb-3 d-flex justify-content-center">
+                            <button type="button" class="btn btn-secondary " id="submit-button"
                                     onclick="submitResearchDTO(activeItem)">
                                 제출
                             </button>

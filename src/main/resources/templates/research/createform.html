@@ -8,12 +8,11 @@
 <body>
 
 <div th:insert="~{fragments/navbar :: nav_bar('Create')}"></div>
-
+<div th:insert="~{fragments/navbar-side :: nav_bar-side('/research/create')}"></div>
 <div th:insert="~{fragments/createform-layout :: createform-layout('/research/create')}"></div>
 
 <!--todo: 임시저장 버튼 사이드 바로 옴겨서 구현 해야함 create 일때만-->
-<!--            <button type="button" class="btn btn-primary" id="save-button" onclick="updateResearchDTO()">임시저장-->
-<!--            </button>-->
+
 <script>
 
 </script>
