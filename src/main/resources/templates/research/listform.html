@@ -15,7 +15,7 @@
 <div th:insert="~{fragments/navbar :: nav_bar('research')}"></div>
 
 <section th:fragment="rss">
-    <div class="container p-0 text-center">
+    <div class="container p-0 text-center mt-5 pt-5">
         <form action="/excel/download" method="get" id="excelDownloadForm" style="display: none;">
             <input type="hidden" name="column" th:value="${rssDTO.column}"> <!-- 검색할 칼럼 -->
             <input type="hidden" name="keyword" th:value="${rssDTO.keyword}"> <!-- 검색어 -->

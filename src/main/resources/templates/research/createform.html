@@ -8,73 +8,12 @@
 <body>
 
 <div th:insert="~{fragments/navbar :: nav_bar('Create')}"></div>
-<div class="container">
 
-    <h3 class="my-4">설문조사 작성</h3>
+<div th:insert="~{fragments/createform-layout :: createform-layout('/research/create')}"></div>
 
-    <div id="create-form">
-        <div class="mb-3">
-            <label for="research-title-input" class="form-label">설문제목</label>
-            <input type="text" class="form-control" id="research-title-input" name="title"
-                   th:value="${rsDTO.sur_title}"
-                   onkeyup="validateInput(this,100)">
-            <small id="research-title-input-help" class="form-text text-muted"></small>
-        </div>
-        <div class="mb-3">
-            <label for="research-writer-input" class="form-label">작성자</label>
-            <input type="text" class="form-control" id="research-writer-input" name="writer"
-                   th:value="${rsDTO.reg_name}" disabled>
-        </div>
-        <!--        기간 (달력 팝업)-->
-
-        <div class="mb-3 row">
-            <label for="research-startdate-input" class="col-2 col-form-label">설문시작</label>
-            <div class="col-4 start-picker">
-                <input type="datetime-local" class="form-control" id="research-startdate-input" name="startdate"
-                       th:value="${rsDTO.sur_sat_date}"
-                       th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd''T''HH:mm')}"
-                       oninput="document.querySelector('#research-enddate-input').min = this.value;">
-            </div>
-
-            <label for="research-enddate-input" class="col-2 col-form-label">설문종료</label>
-            <div class="col-4 end-picker">
-                <input type="datetime-local" class="form-control" id="research-enddate-input" name="enddate"
-                       th:value="${rsDTO.sur_end_date}"
-                       th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd''T''HH:mm')}">
-            </div>
-        </div>
-
-        <div class="mb-3">
-            <label for="research-content-input" class="form-label">설문 설명</label>
-            <textarea class="form-control" id="research-content-input" name="content" rows="6"
-                      onkeyup="validateInput(this,1000)">[[${rsDTO.sur_desc}]]
-            </textarea>
-            <small id="research-content-input-help" class="form-text text-muted">0 / 1000 자</small>
-        </div>
-
-        <!--        <div class="mb-3">-->
-        <!--            <label for="num-of-questions-input" class="form-label">Number of Questions</label>-->
-        <!--            <input type="number" class="form-control" id="num-of-questions-input" name="num_of_questions" min="1"-->
-        <!--                   value="1">-->
-        <!--        </div>-->
-        <div class="mb-3">
-            <button type="button" class="btn btn-primary" id="add-question-button"
-                    onclick="addSuriForm(document.querySelector('#research-query-container').childElementCount + 1)">
-                질문 추가
-            </button>
-            <button type="button" class="btn btn-primary" id="remove-question-button" onclick="deleteSuriForm()">
-                질문 삭제
-            </button>
-            <button type="button" class="btn btn-primary" id="save-button" onclick="updateResearchDTO()">임시저장
-            </button>
-            <button type="button" class="btn btn-primary" id="submit-button" onclick="submitResearchDTO('/research/create')">제출
-            </button>
-        </div>
-        <div id="research-query-container"></div>
-
-
-    </div>
-</div>
+<!--todo: 임시저장 버튼 사이드 바로 옴겨서 구현 해야함 create 일때만-->
+<!--            <button type="button" class="btn btn-primary" id="save-button" onclick="updateResearchDTO()">임시저장-->
+<!--            </button>-->
 <script>
 
 </script>
@@ -83,7 +22,6 @@
     let rsDTO = [[${rsDTO}]];
     let deletedQueryId=[];
     /*]]>*/
-
 </script>
 <script>
     // 페이지 로드 시 초기 데이터를 rsDTO 가져와서 suri 폼을 생성합니다.
@@ -93,12 +31,11 @@
         if (localStorage.getItem('rsDTO') && confirm("이전에 작성한 설문이 있습니다. 불러오시겠습니까?" + "\n" + "(취소 시 새로 작성됩니다.)")) {
             rsDTO = JSON.parse(localStorage.getItem('rsDTO'));
             loadRS();
+            cntSuriForm();
         } else {
             localStorage.removeItem('rsDTO');
         }
-
         console.log(rsDTO)
-
     });
 
     // rsDTO 이용하여 초기 suri 폼을 생성하는 함수

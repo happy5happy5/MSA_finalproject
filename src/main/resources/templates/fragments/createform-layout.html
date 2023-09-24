@@ -1,0 +1,77 @@
+<div th:fragment="createform-layout(activeItem)">
+    <div class="container col-9">
+<!--        '/research/edit'-->
+        <h3 class="my-4">설문조사 수정</h3>
+
+        <div id="create-form">
+            <div class="mb-3">
+                <label for="research-title-input" class="form-label">설문제목</label>
+                <input type="text" class="form-control" id="research-title-input" name="title"
+                       th:value="${rsDTO.sur_title}"
+                       onkeyup="validateInput(this,100)">
+                <small id="research-title-input-help" class="form-text text-muted"></small>
+            </div>
+            <div class="mb-3">
+                <label for="research-writer-input" class="form-label">작성자</label>
+                <input type="text" class="form-control" id="research-writer-input" name="writer"
+                       th:value="${rsDTO.reg_name}" disabled>
+            </div>
+            <!--        기간 (달력 팝업)-->
+
+            <div class="mb-3 row">
+                <label for="research-startdate-input" class="col-2 col-form-label">설문시작</label>
+                <div class="col-4">
+                    <input type="datetime-local" class="form-control" id="research-startdate-input" name="startdate"
+                           th:value="${rsDTO.sur_sat_date}"
+                           th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd''T''HH:mm')}"
+                           oninput="document.querySelector('#research-enddate-input').min = this.value;">
+                </div>
+
+                <label for="research-enddate-input" class="col-2 col-form-label">설문종료</label>
+                <div class="col-4">
+                    <input type="datetime-local" class="form-control" id="research-enddate-input" name="enddate"
+                           th:value="${rsDTO.sur_end_date}"
+                           th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd''T''HH:mm')}">
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label for="research-content-input" class="form-label">설문 설명</label>
+                <textarea class="form-control" id="research-content-input" name="content" rows="6"
+                          onkeyup="validateInput(this,1000)">
+                </textarea>
+                <small id="research-content-input-help" class="form-text text-muted">0 / 1000 자</small>
+            </div>
+
+            <!--        <div class="mb-3">-->
+            <!--            <label for="num-of-questions-input" class="form-label">Number of Questions</label>-->
+            <!--            <input type="number" class="form-control" id="num-of-questions-input" name="num_of_questions" min="1"-->
+            <!--                   value="1">-->
+            <!--        </div>-->
+            <div class="mb-3">
+                <!--            총 문항 수-->
+                <span id="num-of-questions"></span>
+                <button type="button" class="btn btn-primary" id="add-question-button"
+                        onclick="addSuriForm(document.querySelector('#research-query-container').childElementCount + 1)">
+                    질문 추가
+                </button>
+                <button type="button" class="btn btn-primary" id="remove-question-button" onclick="deleteSuriForm()">
+                    질문 삭제
+                </button>
+                <!--            <button type="button" class="btn btn-primary" id="save-button" onclick="updateResearchDTO()">Save Draft-->
+                <!--            </button>-->
+<!--                <button th:onclick="'javascript:upload(' + ${gallery} + ')'"></button>-->
+                <button type="button" class="btn btn-primary" id="submit-button"
+                        onclick="submitResearchDTO(activeItem)">
+                    제출
+                </button>
+            </div>
+            <div id="research-query-container"></div>
+        </div>
+    </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        let activeItem = [[${activeItem}]];
+        /*]]>*/
+    </script>
+</div>

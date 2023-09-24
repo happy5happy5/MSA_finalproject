@@ -39,7 +39,6 @@ function createTextInput(name) {
 }
 
 function createMultiInput(questionNumber) {
-
     let initialValue = 1;
     if(rsDTO.suri)initialValue = rsDTO.suri[questionNumber - 1] ? rsDTO.suri[questionNumber - 1].suri_multi : 1;
     const questionMultiLabel = '제출 가능한 선택지 개수 최대값:';
@@ -212,6 +211,8 @@ function addSuriForm(questionNumber) {
         let suri_seq = suriForm.querySelector('input[name^="suri_seq_"]').value
         deletedQueryId = deletedQueryId.filter(_suri_seq => _suri_seq !== suri_seq)
     }
+
+    cntSuriForm();
 }
 function deleteSuriForm() {
     let suriForms = document.querySelector('#research-query-container')
@@ -226,4 +227,11 @@ function deleteSuriForm() {
     }
     if (suriForms.lastChild) suriForms.lastChild.remove()
     console.log(deletedQueryId)
+    cntSuriForm();
+}
+
+
+function cntSuriForm() {
+    let cnt = document.querySelector('#research-query-container').childElementCount;
+    document.querySelector('#num-of-questions').textContent = `총 문항 수: ${cnt}`;
 }
