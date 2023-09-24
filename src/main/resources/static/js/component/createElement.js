@@ -76,7 +76,6 @@ function createMultiInput(questionNumber) {
     return multiContainer;
 }
 
-
 function addValidationAndLimit(input, maxLength) {
     const helpElement = document.createElement('small');
     helpElement.name = input.name + '-help';
@@ -109,7 +108,6 @@ function addValidationAndLimit(input, maxLength) {
         }
     });
 }
-
 
 function addSuriForm(questionNumber) {
     // 이미 해당 번호의 Suri 폼이 존재하는지 확인

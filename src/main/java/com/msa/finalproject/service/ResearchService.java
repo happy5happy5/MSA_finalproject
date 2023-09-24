@@ -11,7 +11,6 @@ public interface ResearchService {
 
     RSsDTO getList(RequestRSDTO requestRSDTO);
 
-
     void createRS(RSDTO rsDTO);
 
     RSDTO getRS(int surSeq);

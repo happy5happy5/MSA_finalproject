@@ -31,7 +31,7 @@ public interface ResearchMapper {
     List<RS> getRSsFromStart(
             int pageSize,
             int startSeq,
-            int offset,
+            int offSet,
             String column,
             String keyword
     );

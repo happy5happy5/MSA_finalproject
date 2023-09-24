@@ -155,23 +155,28 @@
 
     // 설문 조사 시작 버튼 클릭 이벤트 핸들러
     document.getElementById("startSurveyBtn").addEventListener("click", function () {
+
+        console.log(rsDTO.useable)
+        if(rsDTO.useable === 'N'){
+            alert("설문 조사가 기간이 아닙니다.");
+            return;
+        }
+
+
         // 여기에 설문 조사 시작 동작
         alert("Survey started!!!!!!!!!!!!!!!!!!!!!!!!!");
         window.location.href = "/research/start" + "?sur_seq=" + rsDTO.sur_seq;
-        // todo: 사용자 인증 필요 하면 아래 쪽 으로 해야함
-        // axios.get("/research/start" + "?sur_seq=" + rsDTO.sur_seq)
-        //     .then(function (response) {
-        //         console.log(response);
-        //         window.location.href = "/research/start" + "?sur_seq=" + rsDTO.sur_seq;
-        //     })
-        //     .catch(function (error) {
-        //         console.log(error);
-        //     });
     });
 
     // 설문 조사 수정 버튼 클릭 이벤트 핸들러
     document.getElementById("editSurveyBtn").addEventListener("click", function () {
         // 여기에 설문 조사 수정 동작
+
+        if(rsDTO.editable === 'N'){
+            alert("설문 조사가 수정이 불가능합니다.");
+            return;
+        }
+
         alert("Survey edited!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
         window.location.href = "/research/edit" + "?sur_seq=" + rsDTO.sur_seq;
         // todo: 나중에 인증이 필요 할때는 아래와 같이 사용 해야함
@@ -185,9 +190,15 @@
         //     });
     });
     document.getElementById("resultSurveyBtn").addEventListener("click", function () {
-        // 여기에 설문 조사 수정 동작
-        alert("Survey result!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-        window.location.href = "/research/result" + "?sur_seq=" + rsDTO.sur_seq;
+        // 여기에 설문 조사 결과 동작
+
+        if(rsDTO.useable === 'N' && rsDTO.editable === 'N'){
+            alert("Survey result!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+            window.location.href = "/research/result" + "?sur_seq=" + rsDTO.sur_seq;
+            return;
+        }
+            alert("설문 조사 결과 조회 가능 기간이 아닙니다.");
+
     });
 </script>
 </body>

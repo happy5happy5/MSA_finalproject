@@ -10,20 +10,25 @@
     <div th:insert="~{fragments/navbar :: nav_bar('Survey')}"></div>
 
     <h3 class="my-4">Survey Form</h3>
+
     <div class="mb-3">
-        <label class="form-label">Description:</label>
+        <label class="form-label">설문 제목</label>
+        <div class="form-control" th:text="${rsDTO.sur_title}"></div>
+    </div>
+    <!--    작성자-->
+
+    <div class="mb-3">
+        <label class="form-label">설문 설명</label>
         <div class="form-control" th:text="${rsDTO.sur_desc}"></div>
     </div>
-    <div class="mb-3">
-        <label class="form-label">Start Date:</label>
-        <div class="form-control" th:text="${rsDTO.sur_sat_date}"></div>
+    <div class="mb-3 row">
+        <label class="form-label">설문 기간</label>
+        <div class="period" th:text="${rsDTO.sur_sat_date + '~' + rsDTO.sur_end_date}">
+        </div>
     </div>
+
     <div class="mb-3">
-        <label class="form-label">End Date:</label>
-        <div class="form-control" th:text="${rsDTO.sur_end_date}"></div>
-    </div>
-    <div class="mb-3">
-        <label class="form-label">Researcher:</label>
+        <label class="form-label">작성자</label>
         <div class="form-control" th:text="${rsDTO.reg_name}"></div>
     </div>
 
@@ -168,8 +173,22 @@
             container.appendChild(questionElement);
         });
     }
+    window.document.addEventListener("DOMContentLoaded", () => {
+        let period = document.getElementsByClassName('period');
+        for (let i = 0; i < period.length; i++) {
+            let date = period[i].textContent.split('~');
+            let startDate = new Date(date[0]);
+            let endDate = new Date(date[1]);
+            startDate.setHours(startDate.getHours() + 9);
+            startDate.setMinutes(startDate.getMinutes() + startDate.getTimezoneOffset());
+            endDate.setHours(endDate.getHours() + 9);
+            endDate.setMinutes(endDate.getMinutes() + endDate.getTimezoneOffset());
 
-    window.addEventListener("load", populateQuestions);
+            period[i].textContent = startDate.toLocaleString()  + ' - ' + endDate.toLocaleString();
+        }
+        populateQuestions();
+    });
+    // window.addEventListener("DOMContentLoaded", populateQuestions);
 </script>
 <script>
     function submitSurvey() {
