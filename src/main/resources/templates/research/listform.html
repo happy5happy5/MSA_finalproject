@@ -65,9 +65,10 @@
                 <td th:text="${rss.getReg_name()}"></td>
                 <td class="period" th:text="${rss.sur_sat_date + '~' + rss.sur_end_date}"></td>
                 <td th:text="${rss.getHits()}"></td>
-<!--                useable === "Y" && editable === "N"-->
+                <!--                useable === "Y" && editable === "N"-->
                 <td th:classappend="${(rss.useable == 'Y' &&rss.editable=='N')  ? '' : 'invisible'}">
-                    <a class="btn btn-primary" th:id="${rss.sur_seq}" th:href="@{${'/research/start'}(sur_seq=${rss.sur_seq})}"
+                    <a class="btn btn-primary" th:id="${rss.sur_seq}"
+                       th:href="@{${'/research/start'}(sur_seq=${rss.sur_seq})}"
                        onclick="saveBack()">설문참여</a>
                 </td>
             </tr>
@@ -96,12 +97,12 @@
         window.document.addEventListener("DOMContentLoaded", () => {
             let period = document.getElementsByClassName('period');
             let title = document.getElementsByClassName('title');
-            adjustTextareaHeight(document.getElementById("research-content-input"));
+            if (document.getElementById("research-content-input")) adjustTextareaHeight(document.getElementById("research-content-input"));
             for (let i = 0; i < period.length; i++) {
 
                 //     제목 글자 수 제한
-                if (title[i].offsetWidth > 500) {
-                    title[i].textContent = title[i].textContent.substring(0, 38) + '...';
+                if (title[i].offsetWidth > 150) {
+                    title[i].textContent = title[i].textContent.substring(0, 30) + '...';
                 }
 
                 //날짜 형식 변경 yy-MM-dd HH:mm ~ yy-MM-dd HH:mm
@@ -122,7 +123,7 @@
                     title[i].innerHTML = '<span class="badge bg-primary">진행 예정</span> ' + title[i].innerHTML;
                 } else if (useable === "N" && editable === "N") {
                     title[i].innerHTML = '<span class="badge bg-secondary">종료</span> ' + title[i].innerHTML;
-                } else if(useable === "Y" && editable === "N") {
+                } else if (useable === "Y" && editable === "N") {
                     title[i].innerHTML = '<span class="badge bg-success">진행 중</span> ' + title[i].innerHTML;
 
                 }

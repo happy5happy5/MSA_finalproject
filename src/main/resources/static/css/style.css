@@ -18,3 +18,9 @@
     /*overflow-y: auto;*/
     background: #343a40;
 }
+/*.modal-content{*/
+/*    z-index: 1051;*/
+/*}*/
+.modal-backdrop {
+    z-index: 1000; /* 또는 모달의 z-index보다 작은 값으로 설정 */
+}

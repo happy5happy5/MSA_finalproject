@@ -127,20 +127,45 @@
             questionContainer.appendChild(br);
 
         }
+        // Add button to show textarea for 'Reason'
 
-        // Check if 'etc.' is 'yes' and add a textarea for 'Reason'
-        if (question.suri_etc === 'yes') {
+
+        const reasonContainer = document.createElement("div");
+        // Check if multi is 1 and add a textarea for 'Reason'
+        if (question.suri_multi === '1') {
+            const reasonContainer = document.createElement("div");
+            reasonContainer.classList.add("mt-3");
+            reasonContainer.style.display = "none";
+            reasonContainer.id = `suri_reason_${question.suri_no}`;
+
             const reasonLabel = document.createElement("label");
             reasonLabel.classList.add("form-label");
             reasonLabel.textContent = "Reason:";
-            questionContainer.appendChild(reasonLabel);
+            reasonContainer.appendChild(reasonLabel);
 
             const reasonTextarea = document.createElement("textarea");
             reasonTextarea.classList.add("form-control");
             reasonTextarea.name = `suri_reason_${question.suri_no}`; // Use an appropriate name
             reasonTextarea.rows = 3; // You can adjust the number of rows as needed
-            questionContainer.appendChild(reasonTextarea);
+            reasonContainer.appendChild(reasonTextarea);
+
+            const reasonButton = document.createElement("button");
+            reasonButton.classList.add("btn", "btn-primary", "mt-3");
+            reasonButton.textContent = "선택사유 입력 하기";
+            reasonButton.id = `suri_add_reason_${question.suri_no}`;
+            questionContainer.appendChild(reasonButton);
+
+            reasonButton.addEventListener("click",()=>{
+                if(reasonContainer.style.display === "none"){
+                    reasonContainer.style.display = "block";
+                }else{
+                    reasonContainer.style.display = "none";
+                }
+                reasonTextarea.value = "";
+            })
+            questionContainer.appendChild(reasonContainer);
         }
+
 
         return questionContainer;
     }
@@ -229,8 +254,8 @@
             }
             // 사용자가 입력한 이유 (sura_reason)
             let suraReason = '';
-            if (question.suri_etc === 'yes') {
-                console.log(`Question ${question.suri_no} has reason`)
+            if (question.suri_multi === '1') {
+                console.log(`Question ${question.suri_no} can have reason`)
                 suraReason = document.querySelector(`textarea[name=suri_reason_${question.suri_no}]`).value;
             }
 

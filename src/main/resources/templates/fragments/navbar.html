@@ -26,11 +26,11 @@
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item ">
                         <a class="nav-link border-0" th:classappend="${activeItem == 'home' ? 'text-primary' : ''}"
-                           href="/">Home</a>
+                           href="/">메인</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link border-0" th:classappend="${activeItem == 'about' ? 'text-primary' : ''}"
-                           href="/">About</a>
+                           href="/">소개</a>
                     </li>
 <!--                    <li class="nav-item">-->
 <!--                        <a class="nav-link border-0" th:classappend="${activeItem == 'board' ? 'text-primary' : ''}"-->
@@ -42,7 +42,7 @@
 <!--                    </li>-->
                     <li class="nav-item">
                         <a class="nav-link border-0" th:classappend="${activeItem == 'research' ? 'text-primary' : ''}"
-                           href="/research/list">Research</a>
+                           href="/research/list">설문조사</a>
                     </li>
                 </ul>
 
@@ -97,4 +97,5 @@
         </div>
     </nav>
     <script src="/webjars/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+
 </div>
