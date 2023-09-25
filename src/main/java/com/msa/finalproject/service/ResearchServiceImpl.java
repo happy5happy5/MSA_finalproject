@@ -2,7 +2,7 @@ package com.msa.finalproject.service;
 
 import com.msa.finalproject.mapper.ResearchMapper;
 import com.msa.finalproject.model.*;
-import com.msa.finalproject.util.Statics;
+import com.msa.finalproject.config.Statics;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +28,7 @@ public class ResearchServiceImpl implements ResearchService {
         Integer totalSeq = researchMapper.getTotalSeq(column, keyword);
 
         if (requestRSDTO.getPage() == null || (!(requestRSDTO.getPageToGo() == null) && requestRSDTO.getPageToGo().equals("1"))) {
-            List<RS> rss = researchMapper.getListWithOnlyPageSize(PAGE_SIZE, column, keyword);
+            List<RS> rss = researchMapper.getRSsWithOnlyPageSize(PAGE_SIZE, column, keyword);
             if (rss.isEmpty()) {
                 return null;
             }
@@ -119,5 +119,46 @@ public class ResearchServiceImpl implements ResearchService {
     @Override
     public List<RSA> getRSA(int surSeq) {
         return researchMapper.getRSA(surSeq);
+    }
+
+    @Override
+    public void sendSurveyResult() {
+//        use_yn 이 n 인 rs 을 모두 가져온다.
+//        rsr 을 계산 한다.
+//        rsr 을 insert 하고 rs 의 use_yn 을 y 로 바꾼다. 오직 스케줄러 가 할 일이다.
+
+        List<RS> rss=researchMapper.getRSsWhereUseYNIsN();
+        for(RS rs:rss){
+            int surSeq= rs.getSur_seq();
+            List<RSA> rsa=researchMapper.getRSA(surSeq);
+//            각 rsa 의 sura_item 당 각각 의 합을 구한다.
+//            일단 sura_item 의 형태인 '123' 을 1,2,3 으로 나눈다.
+//            sura_item 을 나눈걸 item 이라고 하자.
+//            item 을 하나씩 꺼내서 sura_no 를 구한다.
+//            sura_no 에 해당하는 suri_seq 를 구한다.
+//            suri_seq 에 해당하는 rsr 을 없다면 insert 하고 있다면 update 한다
+//            그리고 rsa 의 sura_item 을 각각의 합으로 바꾼다.
+//            그리고 rsa 의 sura_cnt 를 구한다.
+
+            for(RSA _rsa:rsa){
+                String suraItem=_rsa.getSura_item();
+                String[] suraItems=suraItem.split("");
+                int suraCnt=0;
+                for(String item:suraItems){
+//                    Integer.parseInt(item) 이 정답의 번호이다.
+                    int suraNo=Integer.parseInt(item);
+//                    suraNo 에 해당하는 suri_seq 를 구한다.
+//                    int suriSeq=researchMapper.getSuriSeq(surSeq,suraNo);
+                }
+//                _rsa.setSura_cnt(suraCnt);
+//                researchMapper.editRSA(_rsa);
+            }
+
+
+            int surrCnt=rsa.size();
+
+
+
+        }
     }
 }

@@ -1,11 +1,11 @@
-package com.msa.finalproject.util;
+package com.msa.finalproject.config;
 
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.jdbc.SQL;
 
 public class ResearchSQLProvider {
 
-    public String getListWithOnlyPageSize(@Param("pageSize") int pageSize, @Param("column") String column, @Param("keyword") String keyword) {
+    public String getRSsWithOnlyPageSize(@Param("pageSize") int pageSize, @Param("column") String column, @Param("keyword") String keyword) {
         return new SQL() {{
             SELECT("*");
             FROM("rs");

@@ -13,6 +13,7 @@ public class RSR {
     private int surr_seq;
     private int sur_seq;
     private int surr_no;
-    private String surr_cnt;
-    private String surr_rate;
+    private int surr_cnt;
+    private int surr_rate;
+    private String surr_reason;
 }

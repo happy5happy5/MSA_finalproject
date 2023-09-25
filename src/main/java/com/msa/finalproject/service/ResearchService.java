@@ -20,4 +20,6 @@ public interface ResearchService {
     void createRSA(List<RSA> rsaDTO);
 
     List<RSA> getRSA(int surSeq);
+
+    void sendSurveyResult();
 }

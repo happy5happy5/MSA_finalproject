@@ -1,4 +1,4 @@
-package com.msa.finalproject.util;
+package com.msa.finalproject.config;
 
 import lombok.Getter;
 

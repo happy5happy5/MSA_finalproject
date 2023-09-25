@@ -1,6 +1,6 @@
 package com.msa.finalproject.model;
 
-import com.msa.finalproject.util.Statics;
+import com.msa.finalproject.config.Statics;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

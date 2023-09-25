@@ -4,7 +4,7 @@ import com.msa.finalproject.model.RS;
 import com.msa.finalproject.model.RSA;
 import com.msa.finalproject.model.RSDTO;
 import com.msa.finalproject.model.RSI;
-import com.msa.finalproject.util.ResearchSQLProvider;
+import com.msa.finalproject.config.ResearchSQLProvider;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -12,8 +12,8 @@ import java.util.List;
 @Mapper
 public interface ResearchMapper {
 
-    @SelectProvider(type = ResearchSQLProvider.class, method = "getListWithOnlyPageSize")
-    List<RS> getListWithOnlyPageSize(int pageSize, String column, String keyword);
+    @SelectProvider(type = ResearchSQLProvider.class, method = "getRSsWithOnlyPageSize")
+    List<RS> getRSsWithOnlyPageSize(int pageSize, String column, String keyword);
 
     @SelectProvider(type = ResearchSQLProvider.class, method = "getTotalSeq")
     Integer getTotalSeq(String column, String keyword);
@@ -67,4 +67,10 @@ public interface ResearchMapper {
 
     @Select("SELECT * FROM rsa WHERE sur_seq = #{sur_seq}")
     List<RSA> getRSA(int surSeq);
+
+    @Select("SELECT * FROM rs WHERE use_yn = 'n' ORDER BY sur_seq DESC")
+    List<RS> getRSsWhereUseYNIsN();
+
+    @Update("UPDATE rs SET use_yn = 'y' WHERE sur_seq = #{sur_seq}")
+    void updateRSUseYNToY(int sur_seq);
 }
