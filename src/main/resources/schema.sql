@@ -97,14 +97,14 @@ CREATE TABLE IF NOT EXISTS rs
     sur_title    VARCHAR(200) NOT NULL COMMENT '설문제목',
     sur_desc     VARCHAR(200) COMMENT '설문설명',
     que_cnt      int COMMENT '질문수',
-    sur_sat_date DATE COMMENT '설문시작일',
-    sur_end_date DATE COMMENT '설문종료일',
+    sur_sat_date VARCHAR(20) COMMENT '설문시작일',
+    sur_end_date VARCHAR(20) COMMENT '설문종료일',
     use_yn       VARCHAR(1) DEFAULT 'n' COMMENT '발송과 저장 여부',
     hits         VARCHAR(8) DEFAULT '0' COMMENT '조회수',
     reg_name     VARCHAR(50) COMMENT '등록자',
-    reg_date     DATE COMMENT '등록일',
+    reg_date     VARCHAR(20) COMMENT '등록일',
     udt_name     VARCHAR(50) COMMENT '수정자',
-    udt_date     DATE COMMENT '수정일'
+    udt_date     VARCHAR(20) COMMENT '수정일'
 );
 
 CREATE TABLE IF NOT EXISTS rsi
@@ -122,9 +122,9 @@ CREATE TABLE IF NOT EXISTS rsi
     suri_multi VARCHAR(2) DEFAULT '1' COMMENT '다중선택수 (1:1개, 2:2개, 3:3개, 4:4개, 5:5개)',
     suri_etc   VARCHAR(3) DEFAULT 'no' COMMENT '선택 사유 (yes/no)',
     reg_name   VARCHAR(50) COMMENT '등록자',
-    reg_date   DATE COMMENT '등록일',
+    reg_date   VARCHAR(20) COMMENT '등록일',
     udt_name   VARCHAR(50) COMMENT '수정자',
-    udt_date   DATE COMMENT '수정일',
+    udt_date   VARCHAR(20) COMMENT '수정일',
     INDEX suri_no_idx (suri_no)
 );
 
@@ -137,7 +137,7 @@ CREATE TABLE IF NOT EXISTS rsa
     sura_item   VARCHAR(5) COMMENT '답변항목 (12345,24,123 등등) + 0:기타',
     sura_reason VARCHAR(200) COMMENT '선택사유 (12345일 경우)',
     sura_name   VARCHAR(50) NOT NULL COMMENT '답변자',
-    sura_date   DATE COMMENT '답변일',
+    sura_date   VARCHAR(20) COMMENT '답변일',
     INDEX sura_no_idx (sura_no)
 );
 

@@ -1,14 +1,12 @@
 package com.msa.finalproject.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class RS {
 
     private Integer no;
@@ -24,5 +22,6 @@ public class RS {
     private String reg_date;
     private String udt_name;
     private String udt_date;
+
 
 }
